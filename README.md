@@ -1,4 +1,4 @@
-![Rubik GDPR Cookie Consent Cover](public/img/cover-image.jpg)
+![Rubik GDPR Cookie Consent Cover](https://matteomorreale.it/wp-content/uploads/2025/06/Free-GDPR-Cookie-Consent.jpg)
 
 # Rubik GDPR Cookie Consent 🍪
 
