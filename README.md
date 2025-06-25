@@ -1,9 +1,12 @@
+![Rubik GDPR Cookie Consent Cover](public/img/cover-image.jpg)
+
 # Rubik GDPR Cookie Consent 🍪
 
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
-[![License](https://img.shields.io/badge/License-GPL2-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![Version](https://img.shields.io/badge/Version-1.0.4-orange.svg)](https://github.com/yourusername/rubik-gdpr-cookie-consent/releases)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC%204.0-green.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+[![Version](https://img.shields.io/badge/Version-1.0.4-orange.svg)](https://github.com/matteomorreale/rubik-gdpr-cookie-consent/releases)
+[![Author](https://img.shields.io/badge/Author-Matteo%20Morreale-blue.svg)](https://github.com/matteomorreale)
 
 > **Plugin WordPress moderno e completo per la gestione del consenso ai cookie conforme GDPR/CCPA con supporto IAB TCF v2.2**
 
@@ -526,8 +529,68 @@ Hai un'idea per migliorare il plugin?
 
 ---
 
-## 🍪 Fatto con ❤️ per la privacy e la conformità web
+## 📄 Licenza e Attribuzione
 
-[Website](https://rubik-gdpr.com) • [Documentation](docs/) • [Support](https://github.com/yourusername/rubik-gdpr-cookie-consent/issues) • [License](LICENSE)
+### 📋 Licenza
+
+Questo progetto è rilasciato sotto la **Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)**.
+
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+#### ✅ Sei libero di:
+
+- **Condividere** — copiare e ridistribuire il materiale in qualsiasi formato
+- **Modificare** — remixare, trasformare e costruire sul materiale
+
+#### ⚠️ Alle seguenti condizioni:
+
+- **Attribuzione** — Devi sempre citare esplicitamente **Matteo Morreale** come autore originale
+- **Non Commerciale** — Non puoi utilizzare questo materiale per scopi commerciali
+- **Nessuna restrizione aggiuntiva** — Non puoi applicare termini legali o misure tecnologiche che limitino legalmente altri
+
+#### �️ Requisiti di Attribuzione
+
+Quando utilizzi questo progetto o opere derivate, **DEVI** sempre:
+
+1. **Citare esplicitamente** "Matteo Morreale" come autore originale
+2. **Includere l'attribuzione** in tutti i contenuti rivolti agli utenti, documentazione e sezioni credits
+3. **Fornire un link** al progetto originale quando possibile
+4. **Includere la licenza** nelle opere derivate
+
+**Esempio di attribuzione corretta:**
+```
+Basato su "Rubik GDPR Cookie Consent" di Matteo Morreale 
+(https://github.com/matteomorreale/rubik-gdpr-cookie-consent)
+Licenza: CC BY-NC 4.0
+```
+
+#### 🚫 Uso Commerciale Vietato
+
+Questo software è fornito **solo per uso non commerciale**. L'uso commerciale include ma non è limitato a:
+
+- Vendere il software o opere derivate
+- Utilizzare il software in prodotti/servizi che generano revenue
+- Incorporare il software in applicazioni commerciali
+- Offrire servizi a pagamento basati su questo software
+
+📧 Per licenze commerciali, contatta: **[matteo@esempio.com]**
+
+#### 🔗 Link Utili
+
+- **Licenza Completa**: [creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
+- **Testo Legale**: [creativecommons.org/licenses/by-nc/4.0/legalcode](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
+- **File LICENSE**: [LICENSE](LICENSE)
+
+### 👨‍💻 Autore
+
+**Matteo Morreale**
+- GitHub: [@matteomorreale](https://github.com/matteomorreale)
+- Progetto: [Rubik GDPR Cookie Consent](https://github.com/matteomorreale/rubik-gdpr-cookie-consent)
+
+---
+
+## �🍪 Fatto con ❤️ per la privacy e la conformità web
+
+[Website](https://rubik-gdpr.com) • [Documentation](docs/) • [Support](https://github.com/matteomorreale/rubik-gdpr-cookie-consent/issues) • [License](LICENSE)
 
 ⭐ Se questo progetto ti è stato utile, lascia una stella su GitHub!

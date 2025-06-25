@@ -1,0 +1,610 @@
+# Copyright (C) 2025 Matteo Morreale
+# This file is distributed under the CC BY-NC 4.0 License.
+# Full license: https://creativecommons.org/licenses/by-nc/4.0/
+msgid ""
+msgstr ""
+"Project-Id-Version: Rubik GDPR Cookie Consent 1.0.4\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/manus-gdpr\n"
+"POT-Creation-Date: 2025-06-25 10:00+0000\n"
+"PO-Revision-Date: 2025-06-25 10:00+0000\n"
+"Last-Translator: Matteo Morreale\n"
+"Language-Team: Italian\n"
+"Language: it_IT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: WordPress\n"
+"X-Domain: manus-gdpr\n"
+
+#: admin/partials/manus-gdpr-admin-display.php
+msgid "GDPR Cookie Consent Settings"
+msgstr "Impostazioni Consenso ai Cookie GDPR"
+
+#: admin/partials/manus-gdpr-admin-display.php
+msgid "General Settings"
+msgstr "Impostazioni Generali"
+
+#: admin/partials/manus-gdpr-admin-display.php
+msgid "Banner Appearance"
+msgstr "Aspetto del Banner"
+
+#: admin/partials/manus-gdpr-admin-display.php
+msgid "Advanced Options"
+msgstr "Opzioni Avanzate"
+
+#: admin/partials/manus-gdpr-admin-display.php
+msgid "Cookie Management"
+msgstr "Gestione Cookie"
+
+#: admin/partials/manus-gdpr-admin-display.php
+msgid "Save Changes"
+msgstr "Salva Modifiche"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Consent Log"
+msgstr "Registro Consensi"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "User"
+msgstr "Utente"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "IP Address"
+msgstr "Indirizzo IP"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Consent Data"
+msgstr "Dati Consenso"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Status"
+msgstr "Stato"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Date"
+msgstr "Data"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Actions"
+msgstr "Azioni"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "No consent records found."
+msgstr "Nessun record di consenso trovato."
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Previous"
+msgstr "Precedente"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Next"
+msgstr "Successivo"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Search consents..."
+msgstr "Cerca consensi..."
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "All Statuses"
+msgstr "Tutti gli Stati"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Accepted"
+msgstr "Accettato"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Rejected"
+msgstr "Rifiutato"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Partial"
+msgstr "Parziale"
+
+#: admin/partials/manus-gdpr-consent-log-display.php
+msgid "Filter"
+msgstr "Filtra"
+
+#: admin/partials/manus-gdpr-cookie-scanner-display.php
+msgid "Cookie Scanner"
+msgstr "Scanner Cookie"
+
+#: admin/partials/manus-gdpr-cookie-scanner-display.php
+msgid "Scan Cookies"
+msgstr "Scansiona Cookie"
+
+#: admin/partials/manus-gdpr-cookie-scanner-display.php
+msgid "Cookie Name"
+msgstr "Nome Cookie"
+
+#: admin/partials/manus-gdpr-cookie-scanner-display.php
+msgid "Category"
+msgstr "Categoria"
+
+#: admin/partials/manus-gdpr-cookie-scanner-display.php
+msgid "Description"
+msgstr "Descrizione"
+
+#: admin/partials/manus-gdpr-cookie-scanner-display.php
+msgid "Domain"
+msgstr "Dominio"
+
+#: admin/partials/manus-gdpr-cookie-scanner-display.php
+msgid "Expiry"
+msgstr "Scadenza"
+
+#: admin/partials/manus-gdpr-cookie-scanner-display.php
+msgid "No cookies found."
+msgstr "Nessun cookie trovato."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Unknown User"
+msgstr "Utente Sconosciuto"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "General Settings"
+msgstr "Impostazioni Generali"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Configure general settings for GDPR cookie consent."
+msgstr "Configura le impostazioni generali per il consenso ai cookie GDPR."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Enable Cookie Banner"
+msgstr "Abilita Banner Cookie"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Show the cookie consent banner"
+msgstr "Mostra il banner di consenso ai cookie"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Banner Message"
+msgstr "Messaggio del Banner"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "This website uses cookies to improve your experience. By continuing to browse, you accept their use."
+msgstr "Questo sito utilizza cookie per migliorare la tua esperienza. Continuando a navigare, accetti il loro utilizzo."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Message shown in the cookie consent banner."
+msgstr "Messaggio mostrato nel banner di consenso ai cookie."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Banner Position"
+msgstr "Posizione del Banner"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Top"
+msgstr "In Alto"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Bottom"
+msgstr "In Basso"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Center (popup)"
+msgstr "Centro (popup)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Position of the banner on the page."
+msgstr "Posizione del banner sulla pagina."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Cookie Categories"
+msgstr "Categorie di Cookie"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Necessary Cookies"
+msgstr "Cookie Necessari"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Analytics Cookies"
+msgstr "Cookie Analitici"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Advertising Cookies"
+msgstr "Cookie Pubblicitari"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Functional Cookies"
+msgstr "Cookie Funzionali"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "always enabled"
+msgstr "sempre abilitati"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Strict Mode"
+msgstr "Modalità Rigorosa"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Block all non-necessary cookies until explicit consent"
+msgstr "Blocca tutti i cookie non necessari fino al consenso esplicito"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Auto Block Unknown Cookies"
+msgstr "Blocca Cookie Sconosciuti Automaticamente"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Automatically block uncategorized cookies"
+msgstr "Blocca automaticamente i cookie non categorizzati"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Banner Background Color"
+msgstr "Colore di Sfondo del Banner"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Background color of the cookie banner."
+msgstr "Colore di sfondo del banner dei cookie."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Text Color"
+msgstr "Colore del Testo"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Text color in the cookie banner."
+msgstr "Colore del testo nel banner dei cookie."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Button Color"
+msgstr "Colore dei Pulsanti"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Color of buttons in the cookie banner."
+msgstr "Colore dei pulsanti nel banner dei cookie."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Show Background Overlay"
+msgstr "Mostra Overlay di Sfondo"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Show a dark background behind the banner for better visibility"
+msgstr "Mostra uno sfondo scuro dietro il banner per dare maggiore evidenza"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Recommended: helps user focus on the cookie banner and improves GDPR compliance."
+msgstr "Consigliato: aiuta l'utente a concentrarsi sul banner cookie e migliora la conformità GDPR."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Background Overlay Color"
+msgstr "Colore Overlay di Sfondo"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Color and opacity of the background overlay. Examples: \"rgba(0,0,0,0.5)\" (black 50%), \"#333333\" (dark gray), \"rgba(47,79,79,0.6)\" (anthracite 60%)."
+msgstr "Colore e opacità dell'overlay di sfondo. Esempi: \"rgba(0,0,0,0.5)\" (nero 50%), \"#333333\" (grigio scuro), \"rgba(47,79,79,0.6)\" (antracite 60%)."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Color Presets:"
+msgstr "Preset Colori:"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Black 50%"
+msgstr "Nero 50%"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Anthracite 60%"
+msgstr "Antracite 60%"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Dark Blue 40%"
+msgstr "Blu Scuro 40%"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Brown 50%"
+msgstr "Marrone 50%"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Banner and Modal Theme"
+msgstr "Tema Banner e Modale"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Light"
+msgstr "Chiaro"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Dark"
+msgstr "Scuro"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Auto (respects system preferences)"
+msgstr "Automatico (rispetta le preferenze del sistema)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Choose the theme for the banner and cookie preferences modal."
+msgstr "Scegli il tema per il banner e la modale delle preferenze cookie."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Banner Layout"
+msgstr "Layout Banner"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Card (centered with margins)"
+msgstr "Card (centrato con margini)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Full Width"
+msgstr "Larghezza Completa"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Choose the layout of the cookie banner. Card layout is recommended for most sites."
+msgstr "Scegli il layout del banner cookie. Il layout card è consigliato per la maggior parte dei siti."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Layout Preview:"
+msgstr "Anteprima Layout:"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Card: Centered banner with margins and rounded corners - modern and elegant appearance"
+msgstr "Card: Banner centrato con margini e bordi arrotondati - aspetto moderno e elegante"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Full Width: Full-width banner without side margins - ideal for more prominent presence"
+msgstr "Larghezza Completa: Banner a tutta larghezza senza margini laterali - ideale per una presenza più prominente"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Custom CSS"
+msgstr "CSS Personalizzato"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Main CSS classes for customization:"
+msgstr "Classi CSS principali per la personalizzazione:"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Quick Templates:"
+msgstr "Template Rapidi:"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Rounded Style"
+msgstr "Stile Arrotondato"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "With Shadow"
+msgstr "Con Ombra"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Gradient"
+msgstr "Gradiente"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Minimalist"
+msgstr "Minimalista"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Add your custom CSS to modify the appearance of the cookie banner and preferences modal. CSS will be applied automatically to the frontend."
+msgstr "Aggiungi il tuo CSS personalizzato per modificare l'aspetto del banner dei cookie e del modal delle preferenze. Il CSS verrà applicato automaticamente nel frontend."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Enable IAB TCF v2.2"
+msgstr "Abilita IAB TCF v2.2"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Enable support for IAB Transparency & Consent Framework v2.2"
+msgstr "Abilita supporto IAB Transparency & Consent Framework v2.2"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Activate support for the IAB TCF v2.2 standard for advertising consent management. Recommended for sites with programmatic advertising."
+msgstr "Attiva il supporto per lo standard IAB TCF v2.2 per la gestione del consenso pubblicitario. Raccomandato per siti con pubblicità programmatica."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "TCF API Test:"
+msgstr "Test API TCF:"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Click \"Test API\" to verify TCF support..."
+msgstr "Clicca su \"Test API\" per verificare il supporto TCF..."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Test TCF API"
+msgstr "Test API TCF"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Consent Retention Period"
+msgstr "Periodo di Conservazione Consensi"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "1 month (30 days)"
+msgstr "1 mese (30 giorni)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "6 months (180 days)"
+msgstr "6 mesi (180 giorni)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "1 year (365 days)"
+msgstr "1 anno (365 giorni)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "2 years (730 days)"
+msgstr "2 anni (730 giorni)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "5 years (1825 days)"
+msgstr "5 anni (1825 giorni)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "10 years (3650 days)"
+msgstr "10 anni (3650 giorni)"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Consent retention time in database. Older consents will be automatically deleted."
+msgstr "Tempo di conservazione dei consensi nel database. I consensi più vecchi verranno automaticamente cancellati."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Consent Statistics:"
+msgstr "Statistiche Consensi:"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Total consents: %d"
+msgstr "Totale consensi: %d"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Consents to delete: %d"
+msgstr "Consensi da cancellare: %d"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "No consents to delete"
+msgstr "Nessun consenso da cancellare"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Delete Data on Uninstall"
+msgstr "Cancella Dati alla Disinstallazione"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Delete all data when uninstalling the plugin"
+msgstr "Cancella tutti i dati alla disinstallazione del plugin"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "If enabled, all consents and settings will be deleted when the plugin is uninstalled. <strong>Warning:</strong> this action is irreversible."
+msgstr "Se attivato, tutti i consensi e le impostazioni verranno eliminati quando il plugin viene disinstallato. <strong>Attenzione:</strong> questa azione è irreversibile."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Important:"
+msgstr "Importante:"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "If this option is disabled, data will remain in the database even after plugin uninstallation. This can be useful if you plan to reinstall the plugin in the future."
+msgstr "Se questa opzione è disattivata, i dati rimarranno nel database anche dopo la disinstallazione del plugin. Questo può essere utile se prevedi di reinstallare il plugin in futuro."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Consent Management"
+msgstr "Gestione Consensi"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Saved Consents Management"
+msgstr "Gestione Consensi Salvati"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Statistics:"
+msgstr "Statistiche:"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "📊 Total consents in database: <strong>%d</strong>"
+msgstr "📊 Totale consensi nel database: <strong>%d</strong>"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "🕒 Consents from last 7 days: <strong>%d</strong>"
+msgstr "🕒 Consensi degli ultimi 7 giorni: <strong>%d</strong>"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "⏰ Expired consents (older than %d days): <strong>%d</strong>"
+msgstr "⏰ Consensi scaduti (più vecchi di %d giorni): <strong>%d</strong>"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "✅ No expired consents to delete"
+msgstr "✅ Nessun consenso scaduto da cancellare"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "🗑️ Delete All Consents"
+msgstr "🗑️ Cancella Tutti i Consensi"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "🧹 Delete Only Expired Consents"
+msgstr "🧹 Cancella Solo Consensi Scaduti"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "No consents in database."
+msgstr "Nessun consenso presente nel database."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Consents table not found. Consents will be saved on first use."
+msgstr "Tabella consensi non trovata. I consensi verranno salvati al primo utilizzo."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Are you sure you want to delete ALL consents? This action is irreversible!"
+msgstr "Sei sicuro di voler cancellare TUTTI i consensi? Questa azione è irreversibile!"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Delete expired consents according to the set retention period?"
+msgstr "Cancellare i consensi scaduti secondo il periodo di conservazione impostato?"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Deletion in progress..."
+msgstr "Cancellazione in corso..."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Error during deletion"
+msgstr "Errore durante la cancellazione"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Communication error"
+msgstr "Errore di comunicazione"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Security check failed"
+msgstr "Controllo di sicurezza fallito"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Insufficient permissions"
+msgstr "Permessi insufficienti"
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Deleted %d consents."
+msgstr "Cancellati %d consensi."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Error deleting all consents."
+msgstr "Errore durante la cancellazione di tutti i consensi."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Deleted %d expired consents (older than %d days)."
+msgstr "Cancellati %d consensi scaduti (più vecchi di %d giorni)."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Error deleting expired consents."
+msgstr "Errore durante la cancellazione dei consensi scaduti."
+
+#: includes/class-manus-gdpr-admin.php
+msgid "Invalid deletion type."
+msgstr "Tipo di cancellazione non valido."
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Cookie Preferences"
+msgstr "Preferenze Cookie"
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "We use cookies to enhance your browsing experience and analyze our traffic. Please choose your preferences:"
+msgstr "Utilizziamo i cookie per migliorare la tua esperienza di navigazione e analizzare il nostro traffico. Scegli le tue preferenze:"
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Necessary cookies are essential for the website to function properly. They cannot be disabled."
+msgstr "I cookie necessari sono essenziali per il corretto funzionamento del sito web. Non possono essere disabilitati."
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Analytics cookies help us understand how visitors interact with our website."
+msgstr "I cookie analitici ci aiutano a capire come i visitatori interagiscono con il nostro sito web."
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Advertising cookies are used to provide you with relevant ads."
+msgstr "I cookie pubblicitari vengono utilizzati per fornirti annunci pertinenti."
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Functional cookies enable specific features and remember your preferences."
+msgstr "I cookie funzionali abilitano funzionalità specifiche e ricordano le tue preferenze."
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Accept All"
+msgstr "Accetta Tutti"
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Reject All"
+msgstr "Rifiuta Tutti"
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Save Preferences"
+msgstr "Salva Preferenze"
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Manage Preferences"
+msgstr "Gestisci Preferenze"
+
+#: public/partials/manus-gdpr-public-display.php
+msgid "Close"
+msgstr "Chiudi"
+
+#: public/partials/manus-gdpr-floating-icon.php
+msgid "Cookie Settings"
+msgstr "Impostazioni Cookie"
+
+#: public/partials/manus-gdpr-floating-icon.php
+msgid "Manage your cookie preferences"
+msgstr "Gestisci le tue preferenze sui cookie"
