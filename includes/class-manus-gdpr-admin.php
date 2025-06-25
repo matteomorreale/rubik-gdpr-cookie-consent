@@ -49,6 +49,9 @@ class Manus_GDPR_Admin {
 
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+        
+        // Hook per AJAX cancellazione consensi
+        add_action( 'wp_ajax_manus_gdpr_clear_consents', array( $this, 'handle_clear_consents_ajax' ) );
 
     }
 
@@ -59,7 +62,7 @@ class Manus_GDPR_Admin {
      */
     public function enqueue_styles() {
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../admin/css/manus-gdpr-admin.css', array(), MANUS_GDPR_VERSION, 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../admin/css/manus-gdpr-admin.css', array(), MANUS_GDPR_VERSION . '.4', 'all' );
 
     }
 
@@ -70,7 +73,13 @@ class Manus_GDPR_Admin {
      */
     public function enqueue_scripts() {
 
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../admin/js/manus-gdpr-admin.js', array( 'jquery' ), MANUS_GDPR_VERSION, false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../admin/js/manus-gdpr-admin.js', array( 'jquery' ), MANUS_GDPR_VERSION . '.4', false );
+        
+        // Localizzazione per AJAX
+        wp_localize_script( $this->plugin_name, 'manus_gdpr_admin_ajax', array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce( 'manus_gdpr_clear_consents' )
+        ) );
 
     }
 
@@ -406,6 +415,31 @@ class Manus_GDPR_Admin {
             'manus-gdpr',
             'manus_gdpr_general_section'
         );
+
+        // Consent management settings
+        add_settings_field(
+            'consent_retention_period',
+            __( 'Periodo di conservazione consensi', 'manus-gdpr' ),
+            array( $this, 'consent_retention_period_callback' ),
+            'manus-gdpr',
+            'manus_gdpr_general_section'
+        );
+
+        add_settings_field(
+            'delete_data_on_uninstall',
+            __( 'Cancella dati alla disinstallazione', 'manus-gdpr' ),
+            array( $this, 'delete_data_on_uninstall_callback' ),
+            'manus-gdpr',
+            'manus_gdpr_general_section'
+        );
+
+        add_settings_field(
+            'clear_all_consents',
+            __( 'Gestione consensi', 'manus-gdpr' ),
+            array( $this, 'clear_all_consents_callback' ),
+            'manus-gdpr',
+            'manus_gdpr_general_section'
+        );
     }
 
     /**
@@ -489,6 +523,21 @@ class Manus_GDPR_Admin {
 
         if ( isset( $input['enable_tcf_v2'] ) ) {
             $sanitized['enable_tcf_v2'] = (bool) $input['enable_tcf_v2'];
+        }
+
+        // Sanitize consent management settings
+        if ( isset( $input['consent_retention_period'] ) ) {
+            $valid_periods = array( '30', '180', '365', '730', '1825', '3650' ); // days
+            $retention_period = sanitize_text_field( $input['consent_retention_period'] );
+            if ( in_array( $retention_period, $valid_periods ) ) {
+                $sanitized['consent_retention_period'] = $retention_period;
+            } else {
+                $sanitized['consent_retention_period'] = '365'; // Default to 1 year
+            }
+        }
+
+        if ( isset( $input['delete_data_on_uninstall'] ) ) {
+            $sanitized['delete_data_on_uninstall'] = (bool) $input['delete_data_on_uninstall'];
         }
 
         return $sanitized;
@@ -1111,6 +1160,228 @@ class Manus_GDPR_Admin {
             }
         });
         </script>';
+    }
+
+    /**
+     * Consent retention period field callback.
+     *
+     * @since    1.0.3
+     */
+    public function consent_retention_period_callback() {
+        $options = get_option( 'manus_gdpr_settings', array() );
+        $retention_period = isset( $options['consent_retention_period'] ) ? $options['consent_retention_period'] : '365';
+        
+        $periods = array(
+            '30' => __( '1 mese (30 giorni)', 'manus-gdpr' ),
+            '180' => __( '6 mesi (180 giorni)', 'manus-gdpr' ),
+            '365' => __( '1 anno (365 giorni)', 'manus-gdpr' ),
+            '730' => __( '2 anni (730 giorni)', 'manus-gdpr' ),
+            '1825' => __( '5 anni (1825 giorni)', 'manus-gdpr' ),
+            '3650' => __( '10 anni (3650 giorni)', 'manus-gdpr' )
+        );
+        
+        echo '<select id="consent_retention_period" name="manus_gdpr_settings[consent_retention_period]" class="regular-text">';
+        foreach ( $periods as $value => $label ) {
+            echo '<option value="' . esc_attr( $value ) . '"' . selected( $retention_period, $value, false ) . '>' . esc_html( $label ) . '</option>';
+        }
+        echo '</select>';
+        
+        echo '<p class="description">' . __( 'Tempo di conservazione dei consensi nel database. I consensi più vecchi verranno automaticamente cancellati.', 'manus-gdpr' ) . '</p>';
+        
+        // Show current stats
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'manus_gdpr_consents';
+        
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) == $table_name ) {
+            $total_consents = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+            $old_consents = $wpdb->get_var( $wpdb->prepare( 
+                "SELECT COUNT(*) FROM $table_name WHERE timestamp < DATE_SUB(NOW(), INTERVAL %d DAY)", 
+                intval( $retention_period ) 
+            ) );
+            
+            echo '<div style="margin-top: 10px; padding: 10px; background: #f0f0f1; border-radius: 4px;">';
+            echo '<strong>' . __( 'Statistiche consensi:', 'manus-gdpr' ) . '</strong><br>';
+            echo sprintf( __( 'Totale consensi: %d', 'manus-gdpr' ), $total_consents ) . '<br>';
+            if ( $old_consents > 0 ) {
+                echo '<span style="color: #d63638;">' . sprintf( __( 'Consensi da cancellare: %d', 'manus-gdpr' ), $old_consents ) . '</span>';
+            } else {
+                echo '<span style="color: #00a32a;">' . __( 'Nessun consenso da cancellare', 'manus-gdpr' ) . '</span>';
+            }
+            echo '</div>';
+        }
+    }
+
+    /**
+     * Delete data on uninstall field callback.
+     *
+     * @since    1.0.3
+     */
+    public function delete_data_on_uninstall_callback() {
+        $options = get_option( 'manus_gdpr_settings', array() );
+        $delete_on_uninstall = isset( $options['delete_data_on_uninstall'] ) ? $options['delete_data_on_uninstall'] : false;
+        
+        echo '<input type="checkbox" id="delete_data_on_uninstall" name="manus_gdpr_settings[delete_data_on_uninstall]" value="1" ' . checked( 1, $delete_on_uninstall, false ) . ' />';
+        echo '<label for="delete_data_on_uninstall">' . __( 'Cancella tutti i dati alla disinstallazione del plugin', 'manus-gdpr' ) . '</label>';
+        echo '<p class="description">' . __( 'Se attivato, tutti i consensi e le impostazioni verranno eliminati quando il plugin viene disinstallato. <strong>Attenzione:</strong> questa azione è irreversibile.', 'manus-gdpr' ) . '</p>';
+        
+        echo '<div style="margin-top: 10px; padding: 10px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px;">';
+        echo '<strong>⚠️ ' . __( 'Importante:', 'manus-gdpr' ) . '</strong><br>';
+        echo __( 'Se questa opzione è disattivata, i dati rimarranno nel database anche dopo la disinstallazione del plugin. Questo può essere utile se prevedi di reinstallare il plugin in futuro.', 'manus-gdpr' );
+        echo '</div>';
+    }
+
+    /**
+     * Clear all consents field callback.
+     *
+     * @since    1.0.3
+     */
+    public function clear_all_consents_callback() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'manus_gdpr_consents';
+        
+        echo '<div style="background: #f8f9fa; padding: 15px; border: 1px solid #dee2e6; border-radius: 8px;">';
+        echo '<h4 style="margin: 0 0 10px 0; color: #495057;">' . __( 'Gestione Consensi Salvati', 'manus-gdpr' ) . '</h4>';
+        
+        if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) == $table_name ) {
+            $total_consents = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+            $recent_consents = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)" );
+            
+            // Get retention period for expired consents count
+            $options = get_option( 'manus_gdpr_settings', array() );
+            $retention_period = isset( $options['consent_retention_period'] ) ? intval( $options['consent_retention_period'] ) : 365;
+            $expired_consents = Manus_GDPR_Database::count_expired_consents( $retention_period );
+            
+            echo '<div style="margin-bottom: 15px;">';
+            echo '<strong>' . __( 'Statistiche:', 'manus-gdpr' ) . '</strong><br>';
+            echo sprintf( __( '📊 Totale consensi nel database: <strong>%d</strong>', 'manus-gdpr' ), $total_consents ) . '<br>';
+            echo sprintf( __( '🕒 Consensi degli ultimi 7 giorni: <strong>%d</strong>', 'manus-gdpr' ), $recent_consents ) . '<br>';
+            
+            if ( $expired_consents > 0 ) {
+                echo '<span style="color: #d63638;">⏰ ' . sprintf( __( 'Consensi scaduti (più vecchi di %d giorni): <strong>%d</strong>', 'manus-gdpr' ), $retention_period, $expired_consents ) . '</span>';
+            } else {
+                echo '<span style="color: #00a32a;">✅ ' . __( 'Nessun consenso scaduto da cancellare', 'manus-gdpr' ) . '</span>';
+            }
+            echo '</div>';
+            
+            if ( $total_consents > 0 ) {
+                echo '<div style="margin-bottom: 15px;">';
+                echo '<button type="button" id="clear-all-consents" class="button button-secondary" style="color: #d63638; border-color: #d63638;">';
+                echo '🗑️ ' . __( 'Cancella Tutti i Consensi', 'manus-gdpr' );
+                echo '</button>';
+                echo '<button type="button" id="clear-old-consents" class="button button-secondary" style="margin-left: 10px;">';
+                echo '🧹 ' . __( 'Cancella Solo Consensi Scaduti', 'manus-gdpr' );
+                echo '</button>';
+                echo '</div>';
+                
+                echo '<div id="clear-consents-result" style="display: none; margin-top: 10px;"></div>';
+            } else {
+                echo '<p style="color: #6c757d; font-style: italic;">' . __( 'Nessun consenso presente nel database.', 'manus-gdpr' ) . '</p>';
+            }
+        } else {
+            echo '<p style="color: #6c757d; font-style: italic;">' . __( 'Tabella consensi non trovata. I consensi verranno salvati al primo utilizzo.', 'manus-gdpr' ) . '</p>';
+        }
+        
+        echo '</div>';
+        
+        // JavaScript for clear consents functionality
+        echo '<script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            // Clear all consents
+            document.getElementById("clear-all-consents")?.addEventListener("click", function() {
+                if (confirm("' . esc_js( __( 'Sei sicuro di voler cancellare TUTTI i consensi? Questa azione è irreversibile!', 'manus-gdpr' ) ) . '")) {
+                    clearConsents("all");
+                }
+            });
+            
+            // Clear old consents
+            document.getElementById("clear-old-consents")?.addEventListener("click", function() {
+                if (confirm("' . esc_js( __( 'Cancellare i consensi scaduti secondo il periodo di conservazione impostato?', 'manus-gdpr' ) ) . '")) {
+                    clearConsents("old");
+                }
+            });
+            
+            function clearConsents(type) {
+                const resultDiv = document.getElementById("clear-consents-result");
+                const buttons = document.querySelectorAll("#clear-all-consents, #clear-old-consents");
+                
+                // Disable buttons
+                buttons.forEach(btn => btn.disabled = true);
+                
+                // Show loading
+                resultDiv.style.display = "block";
+                resultDiv.innerHTML = "<p style=\"color: #0073aa;\">⏳ " + "' . esc_js( __( 'Cancellazione in corso...', 'manus-gdpr' ) ) . '" + "</p>";
+                
+                // AJAX request
+                fetch(manus_gdpr_admin_ajax.ajax_url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({
+                        action: "manus_gdpr_clear_consents",
+                        type: type,
+                        nonce: manus_gdpr_admin_ajax.nonce
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        resultDiv.innerHTML = "<p style=\"color: #00a32a;\">✅ " + data.data + "</p>";
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        resultDiv.innerHTML = "<p style=\"color: #d63638;\">❌ " + (data.data || "' . esc_js( __( 'Errore durante la cancellazione', 'manus-gdpr' ) ) . '") + "</p>";
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = "<p style=\"color: #d63638;\">❌ " + "' . esc_js( __( 'Errore di comunicazione', 'manus-gdpr' ) ) . '" + " - " + error.message + "</p>";
+                })
+                .finally(() => {
+                    // Re-enable buttons
+                    buttons.forEach(btn => btn.disabled = false);
+                });
+            }
+        });
+        </script>';
+    }
+
+    /**
+     * Handle AJAX request for clearing consents
+     *
+     * @since    1.0.3
+     */
+    public function handle_clear_consents_ajax() {
+        // Verifica nonce per sicurezza
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'manus_gdpr_clear_consents' ) ) {
+            wp_die( __( 'Security check failed', 'manus-gdpr' ) );
+        }
+        
+        // Verifica capacità utente
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( __( 'Insufficient permissions', 'manus-gdpr' ) );
+        }
+        
+        $type = sanitize_text_field( $_POST['type'] );
+        
+        if ( $type === 'all' ) {
+            $deleted = Manus_GDPR_Database::clear_all_consents();
+            if ( $deleted !== false ) {
+                wp_send_json_success( sprintf( __( 'Cancellati %d consensi.', 'manus-gdpr' ), $deleted ) );
+            } else {
+                wp_send_json_error( __( 'Errore durante la cancellazione di tutti i consensi.', 'manus-gdpr' ) );
+            }
+        } elseif ( $type === 'old' ) {
+            $options = get_option( 'manus_gdpr_settings' );
+            $retention_days = isset( $options['consent_retention_period'] ) ? (int) $options['consent_retention_period'] : 365;
+            
+            $deleted = Manus_GDPR_Database::clear_expired_consents( $retention_days );
+            if ( $deleted !== false ) {
+                wp_send_json_success( sprintf( __( 'Cancellati %d consensi scaduti (più vecchi di %d giorni).', 'manus-gdpr' ), $deleted, $retention_days ) );
+            } else {
+                wp_send_json_error( __( 'Errore durante la cancellazione dei consensi scaduti.', 'manus-gdpr' ) );
+            }
+        } else {
+            wp_send_json_error( __( 'Tipo di cancellazione non valido.', 'manus-gdpr' ) );
+        }
     }
 
 }

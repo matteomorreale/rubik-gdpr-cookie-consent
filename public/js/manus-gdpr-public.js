@@ -21,6 +21,14 @@ jQuery(document).ready(function($) {
         if ($banner.length && $banner.is(':visible')) {
             setTimeout(showOverlay, 100); // Small delay for smooth transition
         }
+        
+        // Initialize modal preferences with current consent state
+        // This ensures the modal shows correct state even if opened on first load
+        if ($('#manus-gdpr-preferences-modal').length) {
+            setTimeout(function() {
+                applyCurrentConsentToModal();
+            }, 200); // Small delay to ensure DOM is fully ready
+        }
     });
 
     // Handle consent actions
@@ -59,6 +67,11 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         var $modal = $('#manus-gdpr-preferences-modal');
         $modal.css('display', 'block').addClass('show');
+        
+        // Apply current consent state to modal when opening
+        setTimeout(function() {
+            applyCurrentConsentToModal();
+        }, 50); // Small delay to ensure modal is visible
     });
 
     // Handle modal close
@@ -150,7 +163,7 @@ jQuery(document).ready(function($) {
                     
                     // Update TCF API if available
                     if (typeof window.__tcfapi === 'function') {
-                        console.log('Manus GDPR: Updating TCF API with new consent');
+                        console.log('GDPR Cookie Consent: Updating TCF API with new consent');
                         
                         // Trigger TCF update
                         setTimeout(function() {
@@ -163,7 +176,7 @@ jQuery(document).ready(function($) {
                     }
                     
                     // Don't reload page, just update the UI
-                    console.log('Manus GDPR: Consent recorded successfully', consentData);
+                    console.log('GDPR Cookie Consent: Consent recorded successfully', consentData);
                     
                     // Set a cookie to remember consent for floating icon
                     setCookie('manus_gdpr_consent', JSON.stringify({
@@ -229,6 +242,11 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         var $modal = $('#manus-gdpr-preferences-modal');
         $modal.css('display', 'block').addClass('show');
+        
+        // Apply current consent state to modal when opening
+        setTimeout(function() {
+            applyCurrentConsentToModal();
+        }, 50); // Small delay to ensure modal is visible
     });
 
     // Check if consent has already been given and show floating icon
@@ -256,28 +274,94 @@ jQuery(document).ready(function($) {
         }
         return null;
     }
-    
-    // Helper function to set cookie
-    function setCookie(name, value, days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
+
+    // Get current consent data from cookie
+    function getCurrentConsentData() {
+        var consentCookie = getCookie('manus_gdpr_consent');
+        var consentDataCookie = getCookie('manus_gdpr_consent_data');
+        
+        // Default values (all false except necessary)
+        var defaultData = {
+            necessary: true,
+            analytics: false,
+            advertising: false,
+            functional: false
+        };
+        
+        if (!consentCookie) {
+            return defaultData;
         }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        
+        // Handle simple accept/reject values
+        if (consentCookie === 'accepted') {
+            return {
+                necessary: true,
+                analytics: true,
+                advertising: true,
+                functional: true
+            };
+        } else if (consentCookie === 'rejected') {
+            return defaultData; // All false except necessary
+        }
+        
+        // Handle detailed consent data
+        if (consentDataCookie) {
+            try {
+                var parsedData = JSON.parse(decodeURIComponent(consentDataCookie));
+                if (parsedData && parsedData.data) {
+                    return Object.assign(defaultData, parsedData.data);
+                }
+            } catch (e) {
+                console.warn('Could not parse consent data cookie:', e);
+            }
+        }
+        
+        // Try to parse consent cookie directly if it's JSON
+        try {
+            var parsed = JSON.parse(decodeURIComponent(consentCookie));
+            return Object.assign(defaultData, parsed);
+        } catch (e) {
+            // Not JSON, return default
+        }
+        
+        return defaultData;
+    }
+
+    // Apply current consent state to modal checkboxes
+    function applyCurrentConsentToModal() {
+        var currentConsent = getCurrentConsentData();
+        
+        console.log('GDPR: Applying current consent state:', currentConsent);
+        
+        // Update each checkbox based on current consent
+        $('#manus-gdpr-preferences-modal input[type="checkbox"]').each(function() {
+            var $checkbox = $(this);
+            var category = $checkbox.data('category');
+            
+            if (category && currentConsent.hasOwnProperty(category)) {
+                var shouldBeChecked = currentConsent[category];
+                var isCurrentlyChecked = $checkbox.prop('checked');
+                
+                $checkbox.prop('checked', shouldBeChecked);
+                
+                // Log for debugging
+                console.log('GDPR: Category ' + category + ': ' + isCurrentlyChecked + ' → ' + shouldBeChecked);
+            }
+        });
+        
+        console.log('GDPR: Applied current consent state to modal successfully');
     }
 
     // Check if consent has already been given and show floating icon
     function checkConsentStatus() {
-        console.log('Manus GDPR: Checking consent status...');
+        console.log('GDPR Cookie Consent: Checking consent status...');
         
         // Check if banner is present and visible
         var $banner = $('#manus-gdpr-cookie-banner');
         
         // If banner is visible, don't show floating icon
         if ($banner.length > 0 && $banner.is(':visible') && $banner.css('display') !== 'none') {
-            console.log('Manus GDPR: Banner is visible, hiding floating icon');
+            console.log('GDPR Cookie Consent: Banner is visible, hiding floating icon');
             hideFloatingIcon();
             return;
         }
@@ -287,15 +371,15 @@ jQuery(document).ready(function($) {
         if (consentCookie) {
             try {
                 var consentData = JSON.parse(decodeURIComponent(consentCookie));
-                console.log('Manus GDPR: Found consent cookie, showing floating icon', consentData);
+                console.log('GDPR Cookie Consent: Found consent cookie, showing floating icon', consentData);
                 showFloatingIcon();
             } catch (e) {
-                console.log('Manus GDPR: Invalid consent cookie format, checking simple cookie');
+                console.log('GDPR Cookie Consent: Invalid consent cookie format, checking simple cookie');
                 // Fallback for simple cookie format
                 showFloatingIcon();
             }
         } else {
-            console.log('Manus GDPR: No consent cookie found, hiding floating icon');
+            console.log('GDPR Cookie Consent: No consent cookie found, hiding floating icon');
             hideFloatingIcon();
         }
     }

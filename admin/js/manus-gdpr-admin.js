@@ -20,7 +20,7 @@
             var details = $('#consent-details-' + consentId);
             var button = $(this);
             
-            console.log('Manus GDPR: Consent toggle clicked:', {
+            console.log('GDPR Cookie Consent: Consent toggle clicked:', {
                 consentId: consentId,
                 detailsExists: details.length > 0,
                 isVisible: details.is(':visible'),
@@ -28,7 +28,7 @@
             });
             
             if (details.length === 0) {
-                console.error('Manus GDPR: Details element not found for consent ID:', consentId);
+                console.error('GDPR Cookie Consent: Details element not found for consent ID:', consentId);
                 return;
             }
             
@@ -40,7 +40,7 @@
                 });
                 button.text(button.data('show-text') || 'Mostra dettagli');
                 button.attr('aria-expanded', 'false');
-                console.log('Manus GDPR: Details hidden for consent ID:', consentId);
+                console.log('GDPR Cookie Consent: Details hidden for consent ID:', consentId);
             } else {
                 details.removeClass('gdpr-hiding').addClass('gdpr-showing');
                 details.slideDown(200, function() {
@@ -48,19 +48,19 @@
                 });
                 button.text(button.data('hide-text') || 'Nascondi dettagli');
                 button.attr('aria-expanded', 'true');
-                console.log('Manus GDPR: Details shown for consent ID:', consentId);
+                console.log('GDPR Cookie Consent: Details shown for consent ID:', consentId);
             }
         });
         
         // Inizializzazione completata
-        console.log('Manus GDPR Admin: JavaScript initialized successfully');
+        console.log('GDPR Cookie Consent Admin: JavaScript initialized successfully');
         
         // Debug: verifica presenza elementi
         setTimeout(function() {
             var toggles = $('.consent-toggle');
-            console.log('Manus GDPR: Found ' + toggles.length + ' consent toggles on page');
+            console.log('GDPR Cookie Consent: Found ' + toggles.length + ' consent toggles on page');
             if (toggles.length > 0) {
-                console.log('Manus GDPR: Sample toggle data:', {
+                console.log('GDPR Cookie Consent: Sample toggle data:', {
                     consentId: toggles.first().data('consent-id'),
                     showText: toggles.first().data('show-text'),
                     hideText: toggles.first().data('hide-text')
@@ -520,7 +520,7 @@
         
         // TCF API test function for admin (tests frontend via iframe)
         window.ManusGDPRAdmin.testTCFAPI = function() {
-            console.group('Manus GDPR Admin: TCF API Test');
+            console.group('GDPR Cookie Consent Admin: TCF API Test');
             console.log('Testing TCF API on frontend...');
             
             // Create hidden iframe to test frontend
@@ -589,7 +589,7 @@
                             } else {
                                 console.error('❌ TCF API not found on frontend');
                                 console.error('🔧 Troubleshooting steps:');
-                                console.error('   1. Check if IAB TCF v2.2 is enabled in Manus GDPR settings');
+                                console.error('   1. Check if IAB TCF v2.2 is enabled in GDPR Cookie Consent settings');
                                 console.error('   2. Verify the frontend page is loading correctly');
                                 console.error('   3. Check browser console for JavaScript errors');
                                 console.error('   4. Try testing directly on a frontend page');
@@ -650,7 +650,7 @@
         };
         
         // TCF v2.2 info message for admin
-        console.log('ℹ️  Manus GDPR Admin loaded');
+        console.log('ℹ️  GDPR Cookie Consent Admin loaded');
         console.log('🔧 To test TCF API, run: ManusGDPRAdmin.testTCFAPI()');
         console.log('💡 Or test directly on frontend with: testTCFAPI()');
         

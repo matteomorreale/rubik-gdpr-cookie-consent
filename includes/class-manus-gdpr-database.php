@@ -320,5 +320,73 @@ class Manus_GDPR_Database {
         
         return $success;
     }
+    
+    /**
+     * Clear all consents from the database.
+     *
+     * @since    1.0.3
+     * @return   int|false  Number of deleted rows or false on failure.
+     */
+    public static function clear_all_consents() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'manus_gdpr_consents';
+        
+        // Prima contiamo quante righe ci sono
+        $count = $wpdb->get_var( "SELECT COUNT(*) FROM $table_name" );
+        
+        // Poi cancella tutte le righe
+        $result = $wpdb->query( "DELETE FROM $table_name" );
+        
+        // Restituisci il numero di righe che c'erano prima della cancellazione
+        return $result !== false ? $count : false;
+    }
+    
+    /**
+     * Clear expired consents based on retention period.
+     *
+     * @since    1.0.3
+     * @param    int  $retention_days  Number of days to keep consents.
+     * @return   int|false  Number of deleted rows or false on failure.
+     */
+    public static function clear_expired_consents( $retention_days ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'manus_gdpr_consents';
+        
+        $cutoff_date = date( 'Y-m-d H:i:s', strtotime( "-$retention_days days" ) );
+        
+        // Prima contiamo quante righe saranno cancellate
+        $count = $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM $table_name WHERE timestamp < %s",
+            $cutoff_date
+        ) );
+        
+        // Poi cancella le righe scadute
+        $result = $wpdb->query( $wpdb->prepare(
+            "DELETE FROM $table_name WHERE timestamp < %s",
+            $cutoff_date
+        ) );
+        
+        // Restituisci il numero di righe cancellate
+        return $result !== false ? $count : false;
+    }
+    
+    /**
+     * Get count of consents that would be deleted by retention policy.
+     *
+     * @since    1.0.3
+     * @param    int  $retention_days  Number of days to keep consents.
+     * @return   int  Number of expired consents.
+     */
+    public static function count_expired_consents( $retention_days ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'manus_gdpr_consents';
+        
+        $cutoff_date = date( 'Y-m-d H:i:s', strtotime( "-$retention_days days" ) );
+        
+        return (int) $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(*) FROM $table_name WHERE timestamp < %s",
+            $cutoff_date
+        ) );
+    }
 
 }

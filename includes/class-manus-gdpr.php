@@ -177,6 +177,7 @@ class Manus_GDPR {
         $this->loader->add_action( 'wp_head', $plugin_public, 'block_scripts' );
         $this->loader->add_action( 'wp_ajax_manus_gdpr_consent_action', $plugin_public, 'handle_consent_action' );
         $this->loader->add_action( 'wp_ajax_nopriv_manus_gdpr_consent_action', $plugin_public, 'handle_consent_action' );
+        $this->loader->add_action( 'manus_gdpr_cleanup_expired_consents', $this, 'cleanup_expired_consents' );
 
     }
 
@@ -218,6 +219,29 @@ class Manus_GDPR {
      */
     public function get_version() {
         return $this->version;
+    }
+    
+    /**
+     * Clean up expired consents based on retention settings.
+     * Called by cron job.
+     *
+     * @since    1.0.3
+     */
+    public function cleanup_expired_consents() {
+        // Get retention settings
+        $options = get_option( 'manus_gdpr_settings' );
+        $retention_days = isset( $options['consent_retention_period'] ) ? (int) $options['consent_retention_period'] : 365;
+        
+        // Load database class
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-manus-gdpr-database.php';
+        
+        // Clean up expired consents
+        $deleted = Manus_GDPR_Database::clear_expired_consents( $retention_days );
+        
+        // Log the cleanup (optional)
+        if ( $deleted > 0 ) {
+            error_log( "GDPR Cookie Consent: Cleaned up $deleted expired consents (older than $retention_days days)" );
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-# IAB TCF v2.2 Implementation - Manus GDPR Plugin
+# IAB TCF v2.2 Implementation - GDPR Cookie Consent Plugin
 
 ## Overview
 This plugin implements IAB Transparency & Consent Framework v2.2 to provide standardized consent management for advertising purposes.
@@ -115,9 +115,9 @@ __tcfapi('getTCData', 2, function(tcData, success) {
 
 ## Purpose Mapping
 
-The plugin maps Manus GDPR categories to TCF purposes:
+The plugin maps MGDPR Cookie Consent categories to TCF purposes:
 
-| Manus GDPR Category | TCF Purposes |
+| GDPR Cookie Consent Category | TCF Purposes |
 |-------------------|--------------|
 | `necessary` | Purpose 1 (Storage and access) |
 | `advertising` | Purposes 2-6 (Advertising related) |
@@ -197,7 +197,7 @@ The plugin includes a basic vendor list. For production:
 
 ### Custom Event Listening
 ```javascript
-// Listen for Manus GDPR specific events
+// Listen for GDPR Cookie Consent specific events
 document.addEventListener('manus-gdpr-consent-updated', function(event) {
     console.log('Consent updated:', event.detail);
     // Custom handling here

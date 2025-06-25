@@ -14,7 +14,7 @@
     <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
     <div class="card">
-        <h2 class="title"><?php _e( 'Benvenuto in Manus GDPR Cookie Consent', 'manus-gdpr' ); ?></h2>
+        <h2 class="title"><?php _e( 'Benvenuto in GDPR Cookie Consent Cookie Consent', 'manus-gdpr' ); ?></h2>
         <p><?php _e( 'Questo plugin aiuta il tuo sito web a essere conforme al GDPR gestendo i consensi ai cookie degli utenti.', 'manus-gdpr' ); ?></p>
         
         <h3><?php _e( 'Azioni rapide', 'manus-gdpr' ); ?></h3>

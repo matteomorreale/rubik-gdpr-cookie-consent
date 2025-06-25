@@ -29,6 +29,9 @@ class Manus_GDPR_Deactivator {
      * @since    1.0.0
      */
     public static function deactivate() {
+        // Clear scheduled cron jobs
+        wp_clear_scheduled_hook( 'manus_gdpr_cleanup_expired_consents' );
+        
         // Optionally, clean up database tables or settings here.
         // For now, we'll leave the data for re-activation.
     }

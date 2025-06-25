@@ -25,7 +25,7 @@ Il test TCF nell'admin non funzionava perché cercava `window.__tcfapi` nella fi
 ## Come Usare il Test
 
 ### Dall'Admin
-1. Vai alla pagina principale del plugin Manus GDPR
+1. Vai alla pagina principale del plugin GDPR Cookie Consent
 2. Cerca la sezione "IAB TCF v2.2"
 3. Clicca sul pulsante "Testa TCF API"
 4. Controlla la console del browser per i risultati

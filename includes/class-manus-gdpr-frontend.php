@@ -164,7 +164,7 @@ class Manus_GDPR_Frontend {
             foreach ( $scripts_to_block as $script ) {
                 // This is a simplified example. Real blocking requires more sophisticated methods.
                 // For example, using output buffering and replacing script tags.
-                echo '<!-- Script blocked by Manus GDPR: ' . esc_html( $script ) . ' -->';
+                echo '<!-- Script blocked by GDPR Cookie Consent: ' . esc_html( $script ) . ' -->';
             }
         }
     }
@@ -407,7 +407,7 @@ class Manus_GDPR_Frontend {
                 setTimeout(function() {
                     if (window.location.search.includes('manus_gdpr_test_scan=1')) {
                         const cookies = ManusGDPRCookieScanner.detectCookies();
-                        console.group('Manus GDPR Cookie Scanner - Auto Detection');
+                        console.group('GDPR Cookie Consent Cookie Scanner - Auto Detection');
                         console.log('Detected cookies:', cookies);
                         console.log('Scan report:', ManusGDPRCookieScanner.generateScanReport(cookies));
                         console.groupEnd();
@@ -614,7 +614,7 @@ class Manus_GDPR_Frontend {
                     }
                 };
                 
-                // Fill purpose consents based on Manus GDPR settings
+                // Fill purpose consents based on GDPR Cookie Consent settings
                 try {
                     var consentData = consent && consent !== 'accepted' && consent !== 'rejected' 
                         ? JSON.parse(consent)
@@ -725,7 +725,7 @@ class Manus_GDPR_Frontend {
             window.__tcfapi.a = window.__tcfapi.a || [];
             window.__tcfapi.gdprApplies = true;
             
-            console.log('Manus GDPR: IAB TCF v2.2 API initialized');
+            console.log('GDPR Cookie Consent: IAB TCF v2.2 API initialized');
             
         })();
         </script>
@@ -768,7 +768,7 @@ class Manus_GDPR_Frontend {
         $css = strip_tags( $css );
         
         // Add comment for identification
-        $css = "/* Manus GDPR Custom CSS */\n" . $css;
+        $css = "/* GDPR Cookie Consent Custom CSS */\n" . $css;
         
         return $css;
     }
