@@ -8,118 +8,118 @@
 [![Version](https://img.shields.io/badge/Version-1.0.4-orange.svg)](https://github.com/matteomorreale/rubik-gdpr-cookie-consent/releases)
 [![Author](https://img.shields.io/badge/Author-Matteo%20Morreale-blue.svg)](https://github.com/matteomorreale)
 
-> **Plugin WordPress moderno e completo per la gestione del consenso ai cookie conforme GDPR/CCPA con supporto IAB TCF v2.2**
+> **Modern and comprehensive WordPress plugin for GDPR/CCPA compliant cookie consent management with IAB TCF v2.2 support**
 
-Rubik GDPR Cookie Consent è un plugin WordPress professionale che offre una soluzione completa per la gestione del consenso ai cookie, progettato per garantire la conformità alle normative GDPR, CCPA e altri regolamenti sulla privacy a livello mondiale.
+Rubik GDPR Cookie Consent is a professional WordPress plugin that offers a complete solution for cookie consent management, designed to ensure compliance with GDPR, CCPA and other privacy regulations worldwide.
 
 ![Banner Preview](screenshot-banner.png)
 
-## ✨ Caratteristiche Principali
+## ✨ Key Features
 
-### 🎨 **Design Moderno e Accessibile**
+### 🎨 **Modern and Accessible Design**
 
-- **Glassmorphism UI** con effetti di sfocatura e trasparenza
-- **Tema automatico** che si adatta alle preferenze del sistema (light/dark/auto)
-- **Layout responsive** ottimizzato per tutti i dispositivi
-- **Safe Area Support** per dispositivi con notch (iPhone X+, macOS)
-- **Animazioni fluide** con transizioni CSS ottimizzate
+- **Glassmorphism UI** with blur and transparency effects
+- **Automatic theme** that adapts to system preferences (light/dark/auto)
+- **Responsive layout** optimized for all devices
+- **Safe Area Support** for devices with notch (iPhone X+, macOS)
+- **Smooth animations** with optimized CSS transitions
 
-### 🛡️ **Conformità Normative**
+### 🛡️ **Regulatory Compliance**
 
-- **GDPR compliant** (Regolamento Generale sulla Protezione dei Dati)
+- **GDPR compliant** (General Data Protection Regulation)
 - **CCPA ready** (California Consumer Privacy Act)
 - **IAB TCF v2.2** (Transparency & Consent Framework)
-- **Documentazione del consenso** con timestamp e IP tracking
-- **Retention policy** configurabile per i dati di consenso
+- **Consent documentation** with timestamp and IP tracking
+- **Configurable retention policy** for consent data
 
-### ⚙️ **Gestione Avanzata dei Consensi**
+### ⚙️ **Advanced Consent Management**
 
-- **Categorie personalizzabili** (Necessari, Analitici, Pubblicitari, Funzionali)
-- **Consenso granulare** per ogni categoria di cookie
-- **Floating icon** per modificare le preferenze in qualsiasi momento
-- **Pulizia automatica** dei consensi scaduti tramite cron job
-- **Export/Import** delle configurazioni
+- **Customizable categories** (Necessary, Analytics, Advertising, Functional)
+- **Granular consent** for each cookie category
+- **Floating icon** to modify preferences anytime
+- **Automatic cleanup** of expired consents via cron job
+- **Export/Import** configurations
 
-### 🔧 **Funzionalità Amministrative**
+### 🔧 **Administrative Features**
 
-- **Dashboard intuitiva** con statistiche in tempo reale (totali, accettati, rifiutati, parziali)
-- **Cookie scanner automatico** per rilevare tutti i cookie del sito
-- **Gestione avanzata consensi** con cancellazione massiva/selettiva e pulizia automatica scaduti
-- **Retention policy configurabile** (da 1 mese a 10 anni) con cron job automatico
-- **Log dettagliato** con filtri per stato, ricerca per IP/utente e paginazione
-- **Test integrati TCF v2.2** per verificare la conformità IAB
+- **Intuitive dashboard** with real-time statistics (total, accepted, rejected, partial)
+- **Automatic cookie scanner** to detect all site cookies
+- **Advanced consent management** with bulk/selective deletion and automatic expired cleanup
+- **Configurable retention policy** (from 1 month to 10 years) with automatic cron job
+- **Detailed logging** with status filters, IP/user search and pagination
+- **Integrated TCF v2.2 tests** to verify IAB compliance
 
-## 🚀 Installazione Rapida
+## 🚀 Quick Installation
 
-### Metodo 1: Via WordPress Admin
+### Method 1: Via WordPress Admin
 
-1. Scarica il file `.zip` dalla [pagina releases](https://github.com/yourusername/rubik-gdpr-cookie-consent/releases)
-2. Vai su **WordPress Admin** → **Plugin** → **Aggiungi nuovo**
-3. Clicca su **Carica plugin** e seleziona il file `.zip`
-4. Attiva il plugin
-5. Vai su **Rubik GDPR** → **Impostazioni** per configurare
+1. Download the `.zip` file from the [releases page](https://github.com/yourusername/rubik-gdpr-cookie-consent/releases)
+2. Go to **WordPress Admin** → **Plugins** → **Add New**
+3. Click **Upload Plugin** and select the `.zip` file
+4. Activate the plugin
+5. Go to **Rubik GDPR** → **Settings** to configure
 
-### Metodo 2: Via FTP
+### Method 2: Via FTP
 
 ```bash
-# Clona il repository
+# Clone the repository
 git clone https://github.com/yourusername/rubik-gdpr-cookie-consent.git
 
-# Carica nella directory dei plugin WordPress
+# Upload to WordPress plugins directory
 cp -r rubik-gdpr-cookie-consent /path/to/wordpress/wp-content/plugins/
 
-# Attiva tramite WP-CLI (opzionale)
+# Activate via WP-CLI (optional)
 wp plugin activate rubik-gdpr-cookie-consent
 ```
 
-### Metodo 3: Via Composer
+### Method 3: Via Composer
 
 ```bash
 composer require yourusername/rubik-gdpr-cookie-consent
 ```
 
-> **Importante**: Dopo l'installazione, vai su **WordPress Admin** → **Rubik GDPR** per completare la configurazione iniziale.
+> **Important**: After installation, go to **WordPress Admin** → **Rubik GDPR** to complete the initial configuration.
 
-## 📖 Configurazione Iniziale
+## 📖 Initial Configuration
 
-### 1. Configurazione Base
+### 1. Basic Configuration
 
-Dopo l'attivazione, vai su **WordPress Admin** → **Rubik GDPR** → **Impostazioni**:
+After activation, go to **WordPress Admin** → **Rubik GDPR** → **Settings**:
 
-- ✅ **Abilita banner cookie**
-- 📝 **Personalizza il messaggio**
-- 🎨 **Scegli tema e layout**
-- 📍 **Imposta posizione del banner**
+- ✅ **Enable cookie banner**
+- 📝 **Customize the message**
+- 🎨 **Choose theme and layout**
+- 📍 **Set banner position**
 
-### 2. Categorie di Cookie
+### 2. Cookie Categories
 
-Configura le categorie secondo le tue necessità:
+Configure categories according to your needs:
 
 ```php
-// Categorie predefinite
+// Default categories
 $categories = [
-    'necessary'   => 'Cookie Necessari',     // Sempre attivi
-    'analytics'   => 'Cookie Analitici',    // Google Analytics, etc.
-    'advertising' => 'Cookie Pubblicitari', // Google Ads, Facebook, etc.
-    'functional'  => 'Cookie Funzionali'    // Chat, mappe, etc.
+    'necessary'   => 'Necessary Cookies',     // Always active
+    'analytics'   => 'Analytics Cookies',    // Google Analytics, etc.
+    'advertising' => 'Advertising Cookies',  // Google Ads, Facebook, etc.
+    'functional'  => 'Functional Cookies'    // Chat, maps, etc.
 ];
 ```
 
 ### 3. Retention Policy
 
-Imposta per quanto tempo conservare i consensi:
+Set how long to keep consents:
 
-- 📅 **30 giorni** - Per test e sviluppo
-- 📅 **6 mesi** - Configurazione base per siti piccoli
-- 📅 **1 anno** - Configurazione consigliata
-- 📅 **2-10 anni** - Per analisi storiche approfondite e conformità legale
+- 📅 **30 days** - For testing and development
+- 📅 **6 months** - Basic configuration for small sites
+- 📅 **1 year** - Recommended configuration
+- 📅 **2-10 years** - For comprehensive historical analysis and legal compliance
 
-## 🎯 Esempi di Utilizzo
+## 🎯 Usage Examples
 
-### Banner di Consenso Personalizzato
+### Custom Consent Banner
 
 ```css
-/* CSS personalizzato per il banner */
+/* Custom CSS for the banner */
 .manus-gdpr-banner {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     border-radius: 20px;
@@ -137,29 +137,29 @@ Imposta per quanto tempo conservare i consensi:
 }
 ```
 
-### Integrazione JavaScript
+### JavaScript Integration
 
 ```javascript
-// Ascolta eventi di consenso
+// Listen to consent events
 document.addEventListener('manus-gdpr-consent-updated', function(event) {
     const { consentStatus, consentData } = event.detail;
     
-    console.log('Consenso aggiornato:', consentStatus);
-    console.log('Dettagli:', consentData);
+    console.log('Consent updated:', consentStatus);
+    console.log('Details:', consentData);
     
-    // Attiva/disattiva servizi in base al consenso
+    // Enable/disable services based on consent
     if (consentData.analytics) {
-        // Inizializza Google Analytics
+        // Initialize Google Analytics
         gtag('config', 'GA_MEASUREMENT_ID');
     }
     
     if (consentData.advertising) {
-        // Inizializza Google Ads
+        // Initialize Google Ads
         gtag('config', 'AW-CONVERSION_ID');
     }
 });
 
-// Test API TCF (se abilitata)
+// TCF API test (if enabled)
 if (typeof window.__tcfapi === 'function') {
     window.__tcfapi('getTCData', 2, function(tcData, success) {
         if (success) {
@@ -170,225 +170,225 @@ if (typeof window.__tcfapi === 'function') {
 }
 ```
 
-### Hook WordPress
+### WordPress Hooks
 
 ```php
-// Hook per personalizzare il comportamento
+// Hook to customize behavior
 add_action('manus_gdpr_consent_recorded', function($consent_data) {
-    // Logica personalizzata dopo il consenso
+    // Custom logic after consent
     if ($consent_data['consent_status'] === 'accepted') {
-        // Attiva servizi completi
+        // Enable full services
         update_option('enable_full_tracking', true);
     }
 });
 
-// Filtro per modificare le categorie
+// Filter to modify categories
 add_filter('manus_gdpr_cookie_categories', function($categories) {
-    $categories['social'] = 'Cookie Social Media';
+    $categories['social'] = 'Social Media Cookies';
     return $categories;
 });
 ```
 
-## 📊 Dashboard e Statistiche
+## 📊 Dashboard and Statistics
 
-Il pannello admin fornisce una panoramica completa dei consensi:
+The admin panel provides a comprehensive overview of consents:
 
-### Statistiche in Tempo Reale
+### Real-Time Statistics
 
-- 📈 **Consensi totali** registrati nel database
-- ✅ **Consensi accettati** (tutti i cookie abilitati)
-- ❌ **Consensi rifiutati** (solo cookie necessari)
-- ⚖️ **Consensi parziali** (categorie selettive)
-- 🕒 **Consensi recenti** (ultimi 7/30 giorni)
-- ⏰ **Consensi scaduti** da cancellare automaticamente
+- 📈 **Total consents** recorded in database
+- ✅ **Accepted consents** (all cookies enabled)
+- ❌ **Rejected consents** (only necessary cookies)
+- ⚖️ **Partial consents** (selective categories)
+- 🕒 **Recent consents** (last 7/30 days)
+- ⏰ **Expired consents** to be automatically deleted
 
-### Gestione Avanzata
+### Advanced Management
 
-- **Pulizia automatica** via cron job giornaliero
-- **Cancellazione massiva** di tutti i consensi
-- **Cancellazione selettiva** dei consensi scaduti  
-- **Filtri avanzati** per stato e periodo
-- **Ricerca** per IP address o ID utente
+- **Automatic cleanup** via daily cron job
+- **Bulk deletion** of all consents
+- **Selective deletion** of expired consents
+- **Advanced filters** by status and period
+- **Search** by IP address or user ID
 
-### Esportazione Dati
+### Data Export
 
 ```bash
 # Via WordPress Admin
-WordPress Admin → Rubik GDPR → Consent Log → [Filtri] → Export CSV
+WordPress Admin → Rubik GDPR → Consent Log → [Filters] → Export CSV
 
-# Via WP-CLI (opzionale)
-wp gdpr export-consents --format=csv --file=consensi-2025.csv
+# Via WP-CLI (optional)
+wp gdpr export-consents --format=csv --file=consents-2025.csv
 ```
 
-## 🔧 API e Sviluppatori
+## 🔧 API and Developers
 
-### Hooks WordPress Disponibili
+### Available WordPress Hooks
 
 ```php
 /**
- * Actions disponibili
+ * Available actions
  */
 
-// Dopo la registrazione di un consenso
+// After consent registration
 do_action('manus_gdpr_consent_recorded', $consent_data);
 
-// Quando viene mostrato il banner
+// When banner is displayed
 do_action('manus_gdpr_banner_displayed');
 
-// All'apertura della modale preferenze
+// When preferences modal opens
 do_action('manus_gdpr_modal_opened');
 
-// Durante la pulizia automatica dei consensi scaduti (cron)
+// During automatic cleanup of expired consents (cron)
 do_action('manus_gdpr_expired_consents_cleaned', $deleted_count);
 
 /**
- * Filtri disponibili
+ * Available filters
  */
 
-// Personalizza il messaggio del banner
+// Customize banner message
 $message = apply_filters('manus_gdpr_banner_message', $message);
 
-// Modifica le categorie di cookie disponibili
+// Modify available cookie categories
 $categories = apply_filters('manus_gdpr_cookie_categories', $categories);
 
-// Cambia il periodo di retention dei consensi
+// Change consent retention period
 $retention_days = apply_filters('manus_gdpr_retention_period', $days);
 
-// Personalizza i colori del tema
+// Customize theme colors
 $colors = apply_filters('manus_gdpr_theme_colors', $colors);
 ```
 
-### Metodi della Classe Database
+### Database Class Methods
 
 ```php
 // Via WordPress Admin Dashboard
 Manus_GDPR_Database::record_consent($user_id, $ip, $status, $data);
 
-// Ottieni statistiche complete
+// Get complete statistics
 $stats = Manus_GDPR_Database::get_consent_statistics();
-// Ritorna: ['total' => X, 'accepted' => Y, 'rejected' => Z, 'partial' => W, 'recent' => R]
+// Returns: ['total' => X, 'accepted' => Y, 'rejected' => Z, 'partial' => W, 'recent' => R]
 
-// Pulisci consensi scaduti (tramite cron o manualmente)
+// Clean expired consents (via cron or manually)
 $deleted = Manus_GDPR_Database::clear_expired_consents(365);
 
-// Conta consensi da eliminare
+// Count consents to be deleted
 $expired_count = Manus_GDPR_Database::count_expired_consents(365);
 ```
 
-### API REST Endpoints
+### REST API Endpoints
 
 ```http
-GET    /wp-json/manus-gdpr/v1/consents      # Lista tutti i consensi (admin)
-POST   /wp-json/manus-gdpr/v1/consent       # Registra nuovo consenso
-DELETE /wp-json/manus-gdpr/v1/consents/{id} # Elimina consenso specifico
-GET    /wp-json/manus-gdpr/v1/statistics    # Statistiche dei consensi
-POST   /wp-json/manus-gdpr/v1/clean-expired # Pulisci consensi scaduti
+GET    /wp-json/manus-gdpr/v1/consents      # List all consents (admin)
+POST   /wp-json/manus-gdpr/v1/consent       # Register new consent
+DELETE /wp-json/manus-gdpr/v1/consents/{id} # Delete specific consent
+GET    /wp-json/manus-gdpr/v1/statistics    # Consent statistics
+POST   /wp-json/manus-gdpr/v1/clean-expired # Clean expired consents
 ```
 
-> **Nota**: Gli endpoint API REST sono attualmente in sviluppo per versioni future del plugin.
+> **Note**: REST API endpoints are currently in development for future plugin versions.
 
-## 🛠️ Configurazioni Avanzate
+## 🛠️ Advanced Configurations
 
-### Personalizzazione CSS
+### CSS Customization
 
-Puoi personalizzare l'aspetto del plugin tramite CSS personalizzato nel pannello admin o nel tuo tema:
+You can customize the plugin appearance via custom CSS in the admin panel or your theme:
 
 ```css
-/* Personalizza il banner */
+/* Customize the banner */
 .manus-gdpr-banner {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     border-radius: 20px !important;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
 }
 
-/* Floating icon personalizzato */
+/* Custom floating icon */
 .manus-gdpr-floating-icon {
     background: var(--wp-admin-theme-color, #0073aa) !important;
     box-shadow: 0 4px 12px rgba(0,115,170,0.4) !important;
 }
 
-/* Dark mode avanzato */
+/* Advanced dark mode */
 [data-theme="dark"] .manus-gdpr-banner {
     background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%) !important;
     color: #f7fafc !important;
 }
 ```
 
-### Configurazione Multisite WordPress
+### WordPress Multisite Configuration
 
-Per reti WordPress multisite, aggiungi queste configurazioni:
+For WordPress multisite networks, add these configurations:
 
 ```php
-// wp-config.php - Configurazione multisite
+// wp-config.php - Multisite configuration
 define('MANUS_GDPR_MULTISITE_SHARED_CONFIG', true);
 define('MANUS_GDPR_NETWORK_ADMIN_ONLY', false);
 define('MANUS_GDPR_INHERIT_NETWORK_SETTINGS', true);
 ```
 
-### Performance Ottimizzata
+### Performance Optimization
 
-Per siti ad alto traffico, abilita le ottimizzazioni:
+For high-traffic sites, enable optimizations:
 
 ```php
-// wp-config.php - Ottimizzazioni performance
+// wp-config.php - Performance optimizations
 define('MANUS_GDPR_CACHE_ENABLE', true);
 define('MANUS_GDPR_LAZY_LOAD_SCRIPTS', true);
 define('MANUS_GDPR_COMPRESS_OUTPUT', true);
 define('MANUS_GDPR_ASYNC_CONSENT_LOGGING', true);
 ```
 
-### CDN e Caching
+### CDN and Caching
 
-Configurazione per compatibilità con CDN:
+Configuration for CDN compatibility:
 
 ```php
-// functions.php del tema - Supporto CDN
+// theme functions.php - CDN support
 add_filter('manus_gdpr_static_urls', function($urls) {
     return str_replace(home_url(), 'https://cdn.example.com', $urls);
 });
 
-// Esclusione da cache per pagine dinamiche
+// Cache exclusion for dynamic pages
 add_filter('manus_gdpr_no_cache_pages', function($pages) {
     $pages[] = 'consent-preferences';
     return $pages;
 });
 ```
 
-## 🧪 Testing e Debug
+## 🧪 Testing and Debug
 
-### Test di Conformità
+### Compliance Tests
 
 ```bash
-# Test del banner e modale
-open test-syntax-fix.html  # Test interfaccia utente
+# Banner and modal test
+open test-syntax-fix.html  # User interface test
 
-# Test del database
-open test-database-fix.html  # Test operazioni CRUD
+# Database test
+open test-database-fix.html  # CRUD operations test
 
-# Test retention policy
-php test-consent-retention.php  # Test pulizia automatica
+# Retention policy test
+php test-consent-retention.php  # Automatic cleanup test
 ```
 
 ### Debug Mode
 
 ```php
-// wp-config.php - Abilita debug GDPR
+// wp-config.php - Enable GDPR debug
 define('MANUS_GDPR_DEBUG', true);
 define('MANUS_GDPR_LOG_LEVEL', 'debug');
 
-// Verifica tabelle database
+// Verify database tables
 global $wpdb;
 $table = $wpdb->prefix . 'manus_gdpr_consents';
 echo $wpdb->get_var("SHOW TABLES LIKE '$table'");
 ```
 
-### Validazione TCF v2.2
+### TCF v2.2 Validation
 
 ```javascript
-// Console del browser - Test API TCF
-window.testTCFAPI(); // Funzione di test integrata
+// Browser console - TCF API test
+window.testTCFAPI(); // Integrated test function
 
-// Verifica TC String generation
+// Verify TC String generation
 console.log(window.__tcfapi);
 
 // Test event listeners
@@ -397,11 +397,11 @@ window.__tcfapi('addEventListener', 2, function(tcData, success) {
 });
 ```
 
-## 📱 Compatibilità
+## 📱 Compatibility
 
-### Browser Supportati
+### Supported Browsers
 
-| Browser | Versione | Status |
+| Browser | Version | Status |
 |---------|----------|---------|
 | Chrome  | 80+      | ✅ Full |
 | Firefox | 75+      | ✅ Full |
@@ -411,12 +411,12 @@ window.__tcfapi('addEventListener', 2, function(tcData, success) {
 
 ### WordPress
 
-- **WordPress**: 5.0+ (testato fino a 6.5)
-- **PHP**: 7.4+ (raccomandato: 8.1+)
+- **WordPress**: 5.0+ (tested up to 6.5)
+- **PHP**: 7.4+ (recommended: 8.1+)
 - **MySQL**: 5.6+ / MariaDB 10.0+
-- **Multisite**: ✅ Completamente supportato
+- **Multisite**: ✅ Fully supported
 
-### Plugin Compatibili
+### Compatible Plugins
 
 - ✅ **WooCommerce** 5.0+
 - ✅ **Yoast SEO**
@@ -425,42 +425,42 @@ window.__tcfapi('addEventListener', 2, function(tcData, success) {
 - ✅ **W3 Total Cache**
 - ✅ **CloudFlare**
 
-## 🤝 Contribuire
+## 🤝 Contributing
 
-Aiutaci a migliorare Rubik GDPR Cookie Consent!
+Help us improve Rubik GDPR Cookie Consent!
 
-### 1. Setup Sviluppo
+### 1. Development Setup
 
 ```bash
-# Fork e clona il repository
+# Fork and clone the repository
 git clone https://github.com/yourusername/rubik-gdpr-cookie-consent.git
 cd rubik-gdpr-cookie-consent
 
-# Installa dipendenze
+# Install dependencies
 npm install
 composer install
 
-# Setup ambiente di sviluppo
+# Setup development environment
 npm run dev:setup
 ```
 
-### 2. Linee Guida
+### 2. Guidelines
 
-- 📝 **Codice**: Segui gli [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/)
-- 🧪 **Test**: Aggiungi test per nuove funzionalità
-- 📖 **Documentazione**: Aggiorna docs per modifiche API
-- 🌍 **i18n**: Aggiungi traduzioni per nuove stringhe
+- 📝 **Code**: Follow [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/)
+- 🧪 **Tests**: Add tests for new features
+- 📖 **Documentation**: Update docs for API changes
+- 🌍 **i18n**: Add translations for new strings
 
 ### 3. Pull Request Process
 
-1. Crea un branch per la tua feature: `git checkout -b feature/amazing-feature`
-2. Commit delle modifiche: `git commit -m 'Add amazing feature'`
-3. Push del branch: `git push origin feature/amazing-feature`
-4. Apri una Pull Request
+1. Create a branch for your feature: `git checkout -b feature/amazing-feature`
+2. Commit your changes: `git commit -m 'Add amazing feature'`
+3. Push the branch: `git push origin feature/amazing-feature`
+4. Open a Pull Request
 
-## 📄 Licenza
+## 📄 License
 
-Questo progetto è licenziato sotto la **GNU General Public License v2.0**.
+This project is licensed under the **GNU General Public License v2.0**.
 
 ```text
 Copyright (C) 2025 Matteo Morreale
@@ -471,19 +471,19 @@ the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 ```
 
-Vedi il file [LICENSE](LICENSE) per i dettagli completi.
+See the [LICENSE](LICENSE) file for complete details.
 
-## 🎉 Riconoscimenti
+## 🎉 Acknowledgments
 
-### Tecnologie Utilizzate
+### Technologies Used
 
-- **WordPress Plugin API** - Framework base
-- **IAB TCF v2.2** - Standard per il consenso pubblicitario
-- **CSS Grid & Flexbox** - Layout responsive
-- **Vanilla JavaScript** - Performance ottimizzate
-- **MySQL/MariaDB** - Storage dati
+- **WordPress Plugin API** - Base framework
+- **IAB TCF v2.2** - Standard for advertising consent
+- **CSS Grid & Flexbox** - Responsive layout
+- **Vanilla JavaScript** - Optimized performance
+- **MySQL/MariaDB** - Data storage
 
-### Ispirazioni
+### Inspirations
 
 - [GDPR Cookie Compliance](https://wordpress.org/plugins/gdpr-cookie-compliance/)
 - [Cookiebot](https://www.cookiebot.com/)
@@ -491,106 +491,106 @@ Vedi il file [LICENSE](LICENSE) per i dettagli completi.
 
 ### Contributors
 
-[Vedi tutti i contributori su GitHub](https://github.com/yourusername/rubik-gdpr-cookie-consent/graphs/contributors)
+[See all contributors on GitHub](https://github.com/yourusername/rubik-gdpr-cookie-consent/graphs/contributors)
 
-## 🆘 Supporto
+## 🆘 Support
 
-### 📚 Documentazione
+### 📚 Documentation
 
-- [Guida Utente Completa](docs/user-guide.md)
-- [Documentazione API](docs/api-reference.md)
+- [Complete User Guide](docs/user-guide.md)
+- [API Documentation](docs/api-reference.md)
 - [FAQ](docs/faq.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
 ### 💬 Community
 
-- **Forum di Supporto**: [community.rubik-gdpr.com](https://community.rubik-gdpr.com)
+- **Support Forum**: [community.rubik-gdpr.com](https://community.rubik-gdpr.com)
 - **Discord**: [discord.gg/rubik-gdpr](https://discord.gg/rubik-gdpr)
 - **Stack Overflow**: Tag `rubik-gdpr`
 
 ### 🐛 Bug Reports
 
-Hai trovato un bug? Aiutaci a risolverlo!
+Found a bug? Help us fix it!
 
-1. Controlla se esiste già una [issue simile](https://github.com/yourusername/rubik-gdpr-cookie-consent/issues)
-2. Apri una [nuova issue](https://github.com/yourusername/rubik-gdpr-cookie-consent/issues/new) con:
-   - Descrizione dettagliata del problema
-   - Passi per riprodurre il bug
-   - Screenshot o video (se utili)
-   - Informazioni sull'ambiente (WordPress, PHP, browser)
+1. Check if there's already a [similar issue](https://github.com/yourusername/rubik-gdpr-cookie-consent/issues)
+2. Open a [new issue](https://github.com/yourusername/rubik-gdpr-cookie-consent/issues/new) with:
+   - Detailed problem description
+   - Steps to reproduce the bug
+   - Screenshots or videos (if helpful)
+   - Environment information (WordPress, PHP, browser)
 
 ### 💡 Feature Requests
 
-Hai un'idea per migliorare il plugin?
+Have an idea to improve the plugin?
 
-- Apri una [Feature Request](https://github.com/yourusername/rubik-gdpr-cookie-consent/issues/new?template=feature_request.md)
-- Partecipa alle [Discussions](https://github.com/yourusername/rubik-gdpr-cookie-consent/discussions)
-- Vota le feature più richieste
+- Open a [Feature Request](https://github.com/yourusername/rubik-gdpr-cookie-consent/issues/new?template=feature_request.md)
+- Join the [Discussions](https://github.com/yourusername/rubik-gdpr-cookie-consent/discussions)
+- Vote for most requested features
 
 ---
 
-## 📄 Licenza e Attribuzione
+## 📄 License and Attribution
 
-### 📋 Licenza
+### 📋 License
 
-Questo progetto è rilasciato sotto la **Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)**.
+This project is released under the **Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)**.
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-#### ✅ Sei libero di:
+#### ✅ You are free to:
 
-- **Condividere** — copiare e ridistribuire il materiale in qualsiasi formato
-- **Modificare** — remixare, trasformare e costruire sul materiale
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material
 
-#### ⚠️ Alle seguenti condizioni:
+#### ⚠️ Under the following conditions:
 
-- **Attribuzione** — Devi sempre citare esplicitamente **Matteo Morreale** come autore originale
-- **Non Commerciale** — Non puoi utilizzare questo materiale per scopi commerciali
-- **Nessuna restrizione aggiuntiva** — Non puoi applicare termini legali o misure tecnologiche che limitino legalmente altri
+- **Attribution** — You must always explicitly credit **Matteo Morreale** as the original author
+- **NonCommercial** — You may not use the material for commercial purposes
+- **No additional restrictions** — You may not apply legal terms or technological measures that legally restrict others
 
-#### �️ Requisiti di Attribuzione
+#### ©️ Attribution Requirements
 
-Quando utilizzi questo progetto o opere derivate, **DEVI** sempre:
+When using this project or derivative works, you **MUST** always:
 
-1. **Citare esplicitamente** "Matteo Morreale" come autore originale
-2. **Includere l'attribuzione** in tutti i contenuti rivolti agli utenti, documentazione e sezioni credits
-3. **Fornire un link** al progetto originale quando possibile
-4. **Includere la licenza** nelle opere derivate
+1. **Explicitly cite** "Matteo Morreale" as the original author
+2. **Include the attribution** in all user-facing content, documentation and credits sections
+3. **Provide a link** to the original project when possible
+4. **Include the license** in derivative works
 
-**Esempio di attribuzione corretta:**
+**Example of correct attribution:**
 ```
-Basato su "Rubik GDPR Cookie Consent" di Matteo Morreale 
+Based on "Rubik GDPR Cookie Consent" by Matteo Morreale 
 (https://github.com/matteomorreale/rubik-gdpr-cookie-consent)
-Licenza: CC BY-NC 4.0
+License: CC BY-NC 4.0
 ```
 
-#### 🚫 Uso Commerciale Vietato
+#### 🚫 Commercial Use Prohibited
 
-Questo software è fornito **solo per uso non commerciale**. L'uso commerciale include ma non è limitato a:
+This software is provided **for non-commercial use only**. Commercial use includes but is not limited to:
 
-- Vendere il software o opere derivate
-- Utilizzare il software in prodotti/servizi che generano revenue
-- Incorporare il software in applicazioni commerciali
-- Offrire servizi a pagamento basati su questo software
+- Selling the software or derivative works
+- Using the software in products/services that generate revenue
+- Incorporating the software into commercial applications
+- Offering paid services based on this software
 
-📧 Per licenze commerciali, contatta: **[matteo@esempio.com]**
+📧 For commercial licenses, contact: **[matteo@esempio.com]**
 
-#### 🔗 Link Utili
+#### 🔗 Useful Links
 
-- **Licenza Completa**: [creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
-- **Testo Legale**: [creativecommons.org/licenses/by-nc/4.0/legalcode](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
-- **File LICENSE**: [LICENSE](LICENSE)
+- **Full License**: [creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
+- **Legal Code**: [creativecommons.org/licenses/by-nc/4.0/legalcode](https://creativecommons.org/licenses/by-nc/4.0/legalcode)
+- **LICENSE File**: [LICENSE](LICENSE)
 
-### 👨‍💻 Autore
+### 👨‍💻 Author
 
 **Matteo Morreale**
 - GitHub: [@matteomorreale](https://github.com/matteomorreale)
-- Progetto: [Rubik GDPR Cookie Consent](https://github.com/matteomorreale/rubik-gdpr-cookie-consent)
+- Project: [Rubik GDPR Cookie Consent](https://github.com/matteomorreale/rubik-gdpr-cookie-consent)
 
 ---
 
-## �🍪 Fatto con ❤️ per la privacy e la conformità web
+## 🍪 Made with ❤️ for privacy and web compliance
 
 [Website](https://rubik-gdpr.com) • [Documentation](docs/) • [Support](https://github.com/matteomorreale/rubik-gdpr-cookie-consent/issues) • [License](LICENSE)
 
-⭐ Se questo progetto ti è stato utile, lascia una stella su GitHub!
+⭐ If this project was helpful to you, leave a star on GitHub!
