@@ -1,0 +1,184 @@
+/* CSS per l'area di amministrazione del plugin */
+
+/* Consent Log Statistics Cards */
+.consent-stats-cards {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0 30px 0;
+    flex-wrap: wrap;
+}
+
+.consent-stat-card {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    text-align: center;
+    min-width: 120px;
+    flex: 1;
+}
+
+.consent-stat-card h3 {
+    margin: 0 0 5px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.consent-stat-card p {
+    margin: 0;
+    color: #646970;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+/* Consent Status Badges */
+.consent-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.consent-accepted {
+    background-color: #00a32a;
+    color: #fff;
+}
+
+.consent-rejected {
+    background-color: #d63638;
+    color: #fff;
+}
+
+.consent-partial {
+    background-color: #dba617;
+    color: #fff;
+}
+
+/* Consent Log Table Styles */
+.wp-list-table .column-user {
+    width: 15%;
+}
+
+.wp-list-table .column-ip {
+    width: 15%;
+}
+
+.wp-list-table .column-status {
+    width: 12%;
+}
+
+.wp-list-table .column-data {
+    width: 35%;
+}
+
+.wp-list-table .column-date {
+    width: 23%;
+}
+
+.consent-data-toggle {
+    position: relative;
+}
+
+.consent-toggle {
+    text-decoration: none;
+    color: #2271b1;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.consent-toggle:hover {
+    color: #135e96;
+}
+
+.consent-details {
+    background: #f6f7f7;
+    padding: 10px;
+    border: 1px solid #c3c4c7;
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* Filters and Search */
+.tablenav .actions {
+    overflow: visible;
+}
+
+.tablenav .actions form {
+    display: inline-block;
+}
+
+.tablenav .actions select,
+.tablenav .actions input[type="search"] {
+    margin-right: 5px;
+}
+
+.search-box {
+    float: right;
+    margin: 0;
+}
+
+.search-box input[type="search"] {
+    width: 200px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 782px) {
+    .consent-stats-cards {
+        flex-direction: column;
+    }
+    
+    .consent-stat-card {
+        flex: none;
+    }
+    
+    .wp-list-table .column-user,
+    .wp-list-table .column-ip,
+    .wp-list-table .column-status,
+    .wp-list-table .column-data,
+    .wp-list-table .column-date {
+        width: auto;
+    }
+    
+    .search-box input[type="search"] {
+        width: 150px;
+    }
+}
+
+/* Loading and Empty States */
+.notice {
+    margin: 20px 0;
+}
+
+.notice p {
+    margin: 0.5em 0;
+}
+
+/* Accessibility Improvements */
+.consent-toggle:focus {
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: 2px solid transparent;
+}
+
+.consent-details {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Print Styles */
+@media print {
+    .consent-stats-cards,
+    .tablenav,
+    .consent-toggle {
+        display: none;
+    }
+    
+    .consent-details {
+        display: block !important;
+    }
+}
