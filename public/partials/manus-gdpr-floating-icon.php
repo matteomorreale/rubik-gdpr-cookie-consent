@@ -1,6 +1,6 @@
 <?php
 /**
- * Provide a public-facing view for the plugin
+ * Floating icon and preferences modal for users who already gave consent
  *
  * @link       #
  * @since      1.0.0
@@ -10,51 +10,22 @@
  */
 
 $options = get_option( 'manus_gdpr_settings' );
-$banner_message = isset( $options['cookie_banner_message'] ) ? $options['cookie_banner_message'] : __( 'Utilizziamo i cookie per migliorare la tua esperienza di navigazione. Cliccando su "Accetta", acconsenti all\'uso di tutti i cookie.', 'manus-gdpr' );
-$banner_position = isset( $options['cookie_banner_position'] ) ? $options['cookie_banner_position'] : 'bottom';
-$privacy_page_link = isset( $privacy_page_link ) ? $privacy_page_link : '#'; // Fallback in case it's not set
-$show_manage_preferences = isset( $options['show_manage_preferences'] ) ? $options['show_manage_preferences'] : true;
 
 // Custom colors
-$bg_color = isset( $options['banner_background_color'] ) ? $options['banner_background_color'] : '#333333';
-$text_color = isset( $options['banner_text_color'] ) ? $options['banner_text_color'] : '#ffffff';
 $button_color = isset( $options['banner_button_color'] ) ? $options['banner_button_color'] : '#0073aa';
+$show_manage_preferences = isset( $options['show_manage_preferences'] ) ? $options['show_manage_preferences'] : true;
 
-// Overlay settings
-$show_overlay = isset( $options['show_banner_overlay'] ) ? $options['show_banner_overlay'] : true;
-$overlay_color = isset( $options['banner_overlay_color'] ) ? $options['banner_overlay_color'] : 'rgba(47, 79, 79, 0.6)';
-
-// Theme and layout settings
+// Theme settings for modal
 $theme_mode = isset( $options['theme_mode'] ) ? $options['theme_mode'] : 'light';
-$layout_mode = isset( $options['layout_mode'] ) ? $options['layout_mode'] : 'card';
-
-// Build CSS classes for banner and modal
-$banner_classes = array( $banner_position, 'theme-' . $theme_mode, 'layout-' . $layout_mode );
 $modal_classes = array( 'theme-' . $theme_mode );
 
+// Only show if manage preferences is enabled
+if ( ! $show_manage_preferences ) {
+    return;
+}
 ?>
 
 <style>
-/* Personalizzazione colori banner */
-#manus-gdpr-cookie-banner {
-    background: <?php echo esc_attr( $bg_color ); ?> !important;
-    color: <?php echo esc_attr( $text_color ); ?> !important;
-}
-
-.manus-gdpr-banner-text h3,
-.manus-gdpr-banner-text p {
-    color: <?php echo esc_attr( $text_color ); ?> !important;
-}
-
-#manus-gdpr-accept-button {
-    background: <?php echo esc_attr( $button_color ); ?> !important;
-}
-
-/* Personalizzazione overlay */
-.manus-gdpr-overlay {
-    background-color: <?php echo esc_attr( $overlay_color ); ?> !important;
-}
-
 /* Apply button color to floating icon */
 #manus-gdpr-floating-icon {
     background-color: <?php echo esc_attr( $button_color ); ?> !important;
@@ -142,45 +113,6 @@ $modal_classes = array( 'theme-' . $theme_mode );
 }
 </style>
 
-<!-- Overlay per dare evidenza al banner (se abilitato) -->
-<?php if ( $show_overlay ): ?>
-<div class="manus-gdpr-overlay" id="manus-gdpr-overlay"></div>
-<?php endif; ?>
-
-<!-- Banner cookie moderno -->
-<div id="manus-gdpr-cookie-banner" class="<?php echo esc_attr( implode( ' ', $banner_classes ) ); ?>">
-    <div class="manus-gdpr-banner-content">
-        <div class="manus-gdpr-banner-header">
-            <div class="manus-gdpr-banner-icon">
-                🍪
-            </div>
-            <div class="manus-gdpr-banner-text">
-                <h3><?php _e( 'Informativa sui Cookie', 'manus-gdpr' ); ?></h3>
-                <p>
-                    <?php echo esc_html( $banner_message ); ?> 
-                    <a href="<?php echo esc_url( $privacy_page_link ); ?>" target="_blank">
-                        <?php _e( 'Maggiori informazioni', 'manus-gdpr' ); ?>
-                    </a>
-                </p>
-            </div>
-        </div>
-        
-        <div class="manus-gdpr-buttons">
-            <button id="manus-gdpr-accept-button" data-consent-status="accepted">
-                <?php _e( 'Accetta tutti', 'manus-gdpr' ); ?>
-            </button>
-            <button id="manus-gdpr-reject-button" data-consent-status="rejected">
-                <?php _e( 'Rifiuta tutti', 'manus-gdpr' ); ?>
-            </button>
-            <?php if ( $show_manage_preferences ): ?>
-                <button id="manus-gdpr-manage-button" data-consent-status="manage">
-                    <?php _e( 'Gestisci preferenze', 'manus-gdpr' ); ?>
-                </button>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
-
 <!-- Modal per gestione preferenze -->
 <div id="manus-gdpr-preferences-modal" style="display: none;">
     <div id="manus-gdpr-preferences-content" class="<?php echo esc_attr( implode( ' ', $modal_classes ) ); ?>">
@@ -213,8 +145,21 @@ $modal_classes = array( 'theme-' . $theme_mode );
             )
         );
         
+        // Get current consent data from cookie
+        $current_consent = isset( $_COOKIE['manus_gdpr_consent'] ) ? json_decode( stripslashes( $_COOKIE['manus_gdpr_consent'] ), true ) : array();
+        if ( is_string( $current_consent ) ) {
+            // Handle old format cookie
+            $current_consent = array( 'status' => $current_consent );
+        }
+        
         foreach ( $available_categories as $category => $details ):
-            $enabled = isset( $cookie_categories[$category] ) ? $cookie_categories[$category] : $details['required'];
+            // Check current consent status for this category
+            $current_enabled = false;
+            if ( isset( $current_consent['data'][$category] ) ) {
+                $current_enabled = $current_consent['data'][$category];
+            } elseif ( $details['required'] ) {
+                $current_enabled = true; // Always enabled for required categories
+            }
         ?>
             <div class="manus-gdpr-preference-category">
                 <div class="manus-gdpr-preference-toggle">
@@ -227,7 +172,7 @@ $modal_classes = array( 'theme-' . $theme_mode );
                             <input type="checkbox" 
                                    id="manus-gdpr-<?php echo esc_attr( $category ); ?>" 
                                    data-category="<?php echo esc_attr( $category ); ?>"
-                                   <?php checked( $enabled ); ?>
+                                   <?php checked( $current_enabled ); ?>
                                    <?php disabled( $details['required'] ); ?>>
                             <span class="slider"></span>
                         </label>
@@ -243,7 +188,7 @@ $modal_classes = array( 'theme-' . $theme_mode );
 </div>
 
 <!-- Floating icon per riaprire le preferenze cookie -->
-<div id="manus-gdpr-floating-icon" style="display: none;" title="<?php _e( 'Gestisci preferenze cookie', 'manus-gdpr' ); ?>">
+<div id="manus-gdpr-floating-icon" style="display: flex;" title="<?php _e( 'Gestisci preferenze cookie', 'manus-gdpr' ); ?>">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
         <circle cx="12" cy="12" r="2" fill="white"/>

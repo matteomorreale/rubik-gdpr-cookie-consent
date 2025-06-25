@@ -61,9 +61,23 @@ class Manus_GDPR_Database {
             UNIQUE KEY name_domain_path (name,domain,path)
         ) $charset_collate;";
 
+        // Table for storing cookie scan results
+        $table_name_scans = $wpdb->prefix . 'manus_gdpr_cookie_scans';
+        $sql_scans = "CREATE TABLE $table_name_scans (
+            id int(11) NOT NULL AUTO_INCREMENT,
+            url varchar(255) NOT NULL,
+            cookies_data longtext NOT NULL,
+            scan_date datetime DEFAULT CURRENT_TIMESTAMP,
+            user_id int(11) DEFAULT NULL,
+            PRIMARY KEY (id),
+            KEY idx_scan_date (scan_date),
+            KEY idx_user_id (user_id)
+        ) $charset_collate;";
+
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta( $sql_consents );
         dbDelta( $sql_cookies );
+        dbDelta( $sql_scans );
     }
 
     /**

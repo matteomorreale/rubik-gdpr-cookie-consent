@@ -116,10 +116,15 @@ $current_url = admin_url( 'admin.php?page=' . $this->plugin_name . '-consent-log
                         </td>
                         <td class="column-data">
                             <div class="consent-data-toggle">
-                                <button type="button" class="button-link consent-toggle" data-consent-id="<?php echo esc_attr( $record['id'] ); ?>">
+                                <button type="button" class="button-link consent-toggle" 
+                                        data-consent-id="<?php echo esc_attr( $record['id'] ); ?>"
+                                        data-show-text="<?php echo esc_attr( __( 'Mostra dettagli', 'manus-gdpr' ) ); ?>"
+                                        data-hide-text="<?php echo esc_attr( __( 'Nascondi dettagli', 'manus-gdpr' ) ); ?>"
+                                        aria-expanded="false"
+                                        aria-controls="consent-details-<?php echo esc_attr( $record['id'] ); ?>">
                                     <?php _e( 'Mostra dettagli', 'manus-gdpr' ); ?>
                                 </button>
-                                <div class="consent-details" id="consent-details-<?php echo esc_attr( $record['id'] ); ?>" style="display: none; margin-top: 10px;">
+                                <div class="consent-details" id="consent-details-<?php echo esc_attr( $record['id'] ); ?>" style="display: none; margin-top: 10px;" role="region" aria-labelledby="consent-toggle-<?php echo esc_attr( $record['id'] ); ?>">
                                     <?php echo $this->format_consent_data( $record['consent_data'] ); ?>
                                 </div>
                             </div>
@@ -178,22 +183,3 @@ $current_url = admin_url( 'admin.php?page=' . $this->plugin_name . '-consent-log
     <?php endif; ?>
 
 </div>
-
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-    // Toggle consent details
-    $('.consent-toggle').on('click', function() {
-        var consentId = $(this).data('consent-id');
-        var details = $('#consent-details-' + consentId);
-        var button = $(this);
-        
-        if (details.is(':visible')) {
-            details.slideUp();
-            button.text('<?php echo esc_js( __( 'Mostra dettagli', 'manus-gdpr' ) ); ?>');
-        } else {
-            details.slideDown();
-            button.text('<?php echo esc_js( __( 'Nascondi dettagli', 'manus-gdpr' ) ); ?>');
-        }
-    });
-});
-</script>

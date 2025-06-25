@@ -1,40 +1,956 @@
-/* CSS per il frontend del plugin (banner cookie, ecc.) */
+/* CSS per il frontend del plugin (banner cookie, ecc.) - Design Moderno */
+
+/* Overlay for cookie banner */
+.manus-gdpr-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(47, 79, 79, 0.6); /* Default: antracite con 60% opacità */
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.manus-gdpr-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Banner principale con design moderno */
 #manus-gdpr-cookie-banner {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #333;
-    color: #fff;
-    padding: 15px;
-    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 900px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    color: #2c3e50;
+    border-radius: 16px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
     z-index: 9999;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: slideInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Posizionamento per diverse configurazioni */
 #manus-gdpr-cookie-banner.top {
-    top: 0;
-    bottom: auto;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    top: 20px;
+    animation: slideInDown 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-#manus-gdpr-cookie-banner button {
-    background-color: #0073aa;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    margin: 0 5px;
-    cursor: pointer;
-    border-radius: 3px;
+#manus-gdpr-cookie-banner.bottom {
+    bottom: 30px; /* Margine maggiore per toolbar macOS */
 }
 
-#manus-gdpr-cookie-banner button:hover {
-    background-color: #005177;
+#manus-gdpr-cookie-banner.center {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: scaleIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-#manus-gdpr-cookie-banner a {
-    color: #fff;
+/* Contenuto interno del banner */
+.manus-gdpr-banner-content {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.manus-gdpr-banner-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.manus-gdpr-banner-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.manus-gdpr-banner-text {
+    flex: 1;
+}
+
+.manus-gdpr-banner-text h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    line-height: 1.3;
+}
+
+.manus-gdpr-banner-text p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #5a6c7d;
+}
+
+.manus-gdpr-banner-text a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.manus-gdpr-banner-text a:hover {
+    color: #5a67d8;
     text-decoration: underline;
 }
 
+/* Pulsanti moderni */
+.manus-gdpr-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
+#manus-gdpr-cookie-banner button {
+    flex: 1;
+    min-width: 140px;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    font-family: inherit;
+}
+
+#manus-gdpr-cookie-banner button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+#manus-gdpr-cookie-banner button:hover::before {
+    left: 100%;
+}
+
+#manus-gdpr-accept-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+#manus-gdpr-accept-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+#manus-gdpr-accept-button:active {
+    transform: translateY(0);
+}
+
+#manus-gdpr-reject-button {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 2px solid #e9ecef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+#manus-gdpr-reject-button:hover {
+    background: #e9ecef;
+    color: #495057;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+#manus-gdpr-manage-button {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+    box-shadow: none;
+}
+
+#manus-gdpr-manage-button:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #manus-gdpr-cookie-banner {
+        width: calc(100% - 20px);
+        bottom: 20px; /* Ridotto su mobile */
+    }
+    
+    .manus-gdpr-banner-content {
+        padding: 24px;
+        gap: 20px;
+    }
+    
+    .manus-gdpr-banner-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+    
+    .manus-gdpr-banner-icon {
+        align-self: center;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .manus-gdpr-banner-text h3 {
+        font-size: 18px;
+    }
+    
+    .manus-gdpr-banner-text p {
+        font-size: 14px;
+    }
+    
+    .manus-gdpr-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    #manus-gdpr-cookie-banner button {
+        min-width: auto;
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+/* macOS Safari bottom toolbar fix */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    #manus-gdpr-cookie-banner.bottom {
+        bottom: calc(30px + env(safe-area-inset-bottom));
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Animazioni */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Dark mode support - Solo per theme-auto */
+@media (prefers-color-scheme: dark) {
+    #manus-gdpr-cookie-banner.theme-auto {
+        background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+        color: #e2e8f0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .theme-auto .manus-gdpr-banner-text h3 {
+        color: #f7fafc;
+    }
+    
+    .theme-auto .manus-gdpr-banner-text p {
+        color: #cbd5e0;
+    }
+    
+    .theme-auto #manus-gdpr-reject-button {
+        background: #4a5568;
+        color: #e2e8f0;
+        border-color: #718096;
+    }
+    
+    .theme-auto #manus-gdpr-reject-button:hover {
+        background: #2d3748;
+        color: #f7fafc;
+    }
+}
+
+/* Theme Classes - Controllabili da admin */
+
+/* Light Theme (default) */
+#manus-gdpr-cookie-banner.theme-light {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    color: #2c3e50;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-light .manus-gdpr-banner-text h3 {
+    color: #2c3e50;
+}
+
+.theme-light .manus-gdpr-banner-text p {
+    color: #5a6c7d;
+}
+
+.theme-light #manus-gdpr-reject-button {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 2px solid #e9ecef;
+}
+
+.theme-light #manus-gdpr-reject-button:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+/* Dark Theme */
+#manus-gdpr-cookie-banner.theme-dark {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark .manus-gdpr-banner-text h3 {
+    color: #f7fafc;
+}
+
+.theme-dark .manus-gdpr-banner-text p {
+    color: #cbd5e0;
+}
+
+.theme-dark #manus-gdpr-reject-button {
+    background: #4a5568;
+    color: #e2e8f0;
+    border-color: #718096;
+}
+
+.theme-dark #manus-gdpr-reject-button:hover {
+    background: #2d3748;
+    color: #f7fafc;
+}
+
+/* Layout Classes - Controllabili da admin */
+
+/* Card Layout (default - current) */
+#manus-gdpr-cookie-banner.layout-card {
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 900px;
+    border-radius: 16px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Full-width Layout */
+#manus-gdpr-cookie-banner.layout-fullwidth {
+    left: 0;
+    transform: none;
+    width: 100%;
+    max-width: none;
+    border-radius: 0;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#manus-gdpr-cookie-banner.layout-fullwidth.top {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#manus-gdpr-cookie-banner.layout-fullwidth.center {
+    /* Per center con fullwidth, manteniamo card layout */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 40px);
+    max-width: 900px;
+    border-radius: 16px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Full-width responsive adjustments */
+@media (max-width: 768px) {
+    #manus-gdpr-cookie-banner.layout-fullwidth {
+        width: 100%;
+    }
+    
+    #manus-gdpr-cookie-banner.layout-fullwidth .manus-gdpr-banner-content {
+        padding: 20px;
+    }
+}
+
+/* Animazioni per layout full-width */
+@keyframes slideInUpFullwidth {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDownFullwidth {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#manus-gdpr-cookie-banner.layout-fullwidth.bottom {
+    animation: slideInUpFullwidth 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+#manus-gdpr-cookie-banner.layout-fullwidth.top {
+    animation: slideInDownFullwidth 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Modal per gestione preferenze - Design Moderno */
+#manus-gdpr-preferences-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease;
+}
+
+#manus-gdpr-preferences-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 32px;
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    max-width: 700px;
+    width: calc(100% - 40px);
+    max-height: 90vh;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    animation: modalSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+#manus-gdpr-preferences-content h3 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+}
+
+#manus-gdpr-preferences-content > p {
+    margin: 0 0 32px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #5a6c7d;
+    text-align: center;
+}
+
+.manus-gdpr-preference-category {
+    margin: 20px 0;
+    padding: 24px;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.manus-gdpr-preference-category:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+}
+
+.manus-gdpr-preference-category h4 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.manus-gdpr-preference-category p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.manus-gdpr-preference-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.manus-gdpr-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.manus-gdpr-close:hover {
+    background: #e9ecef;
+    color: #495057;
+    transform: rotate(90deg);
+}
+
+/* Save button */
+#manus-gdpr-save-preferences {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 32px auto 0;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+#manus-gdpr-save-preferences:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+}
+
+#manus-gdpr-save-preferences:active {
+    transform: translateY(0);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Dark mode per modal - Solo per theme-auto */
+@media (prefers-color-scheme: dark) {
+    #manus-gdpr-preferences-content.theme-auto {
+        background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+        color: #e2e8f0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .theme-auto #manus-gdpr-preferences-content h3 {
+        color: #f7fafc;
+    }
+    
+    .theme-auto #manus-gdpr-preferences-content > p {
+        color: #cbd5e0;
+    }
+    
+    .theme-auto .manus-gdpr-preference-category {
+        background: #4a5568;
+        border-color: #718096;
+    }
+    
+    .theme-auto .manus-gdpr-preference-category h4 {
+        color: #f7fafc;
+    }
+    
+    .theme-auto .manus-gdpr-close {
+        background: #4a5568;
+        color: #e2e8f0;
+    }
+    
+    .theme-auto .manus-gdpr-close:hover {
+        background: #2d3748;
+        color: #f7fafc;
+    }
+}
+
+/* Theme Classes per Modal - Controllabili da admin */
+
+/* Light Theme per Modal (default) */
+#manus-gdpr-preferences-content.theme-light {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    color: #2c3e50;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-light #manus-gdpr-preferences-content h3 {
+    color: #2c3e50;
+}
+
+.theme-light #manus-gdpr-preferences-content > p {
+    color: #5a6c7d;
+}
+
+.theme-light .manus-gdpr-preference-category {
+    background: white;
+    border-color: #e9ecef;
+}
+
+.theme-light .manus-gdpr-preference-category h4 {
+    color: #2c3e50;
+}
+
+.theme-light .manus-gdpr-preference-category p {
+    color: #6c757d;
+}
+
+.theme-light .manus-gdpr-close {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.theme-light .manus-gdpr-close:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+/* Dark Theme per Modal */
+#manus-gdpr-preferences-content.theme-dark {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark #manus-gdpr-preferences-content h3 {
+    color: #f7fafc;
+}
+
+.theme-dark #manus-gdpr-preferences-content > p {
+    color: #cbd5e0;
+}
+
+.theme-dark .manus-gdpr-preference-category {
+    background: #4a5568;
+    border-color: #718096;
+}
+
+.theme-dark .manus-gdpr-preference-category h4 {
+    color: #f7fafc;
+}
+
+.theme-dark .manus-gdpr-preference-category p {
+    color: #cbd5e0;
+}
+
+.theme-dark .manus-gdpr-close {
+    background: #4a5568;
+    color: #e2e8f0;
+}
+
+.theme-dark .manus-gdpr-close:hover {
+    background: #2d3748;
+    color: #f7fafc;
+}
+
+/* Toggle Switch Styles - Design Moderno */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 64px;
+    height: 36px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 36px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 28px;
+    width: 28px;
+    left: 4px;
+    top: 4px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 50%;
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.15),
+        0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+input:checked + .slider {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+input:focus + .slider {
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+input:checked + .slider:before {
+    transform: translateX(28px);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+input:disabled + .slider {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+input:disabled + .slider:before {
+    transform: translateX(28px);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+/* Hover effect */
+.slider:hover:not(input:disabled + .slider) {
+    transform: scale(1.02);
+}
+
+/* Dark mode for switches - Solo per theme-auto */
+@media (prefers-color-scheme: dark) {
+    .theme-auto .slider {
+        background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    }
+    
+    .theme-auto .slider:before {
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+    }
+    
+    .theme-auto input:checked + .slider:before {
+        background: linear-gradient(135deg, #f7fafc 0%, #e2e8f0 100%);
+    }
+}
+
+/* Floating Cookie Preferences Icon */
+#manus-gdpr-floating-icon {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #0073aa;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9998;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+#manus-gdpr-floating-icon:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+#manus-gdpr-floating-icon svg {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 2px;
+}
+
+.manus-gdpr-floating-text {
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+}
+
+/* Responsive adjustments for floating icon */
+@media (max-width: 768px) {
+    #manus-gdpr-floating-icon {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    #manus-gdpr-floating-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .manus-gdpr-floating-text {
+        font-size: 8px;
+    }
+}
+
+/* Accessibility improvements */
+#manus-gdpr-floating-icon:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* Animation for showing the floating icon */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 0.8;
+        transform: translateY(0);
+    }
+}
+
+#manus-gdpr-floating-icon.show {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Auto Theme - Rispetta le preferenze del sistema */
+#manus-gdpr-cookie-banner.theme-auto {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    color: #2c3e50;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-auto .manus-gdpr-banner-text h3 {
+    color: #2c3e50;
+}
+
+.theme-auto .manus-gdpr-banner-text p {
+    color: #5a6c7d;
+}
+
+.theme-auto #manus-gdpr-reject-button {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 2px solid #e9ecef;
+}
+
+.theme-auto #manus-gdpr-reject-button:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+/* Auto Theme per Modal */
+#manus-gdpr-preferences-content.theme-auto {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    color: #2c3e50;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-auto #manus-gdpr-preferences-content h3 {
+    color: #2c3e50;
+}
+
+.theme-auto #manus-gdpr-preferences-content > p {
+    color: #5a6c7d;
+}
+
+.theme-auto .manus-gdpr-preference-category {
+    background: white;
+    border-color: #e9ecef;
+}
+
+.theme-auto .manus-gdpr-preference-category h4 {
+    color: #2c3e50;
+}
+
+.theme-auto .manus-gdpr-preference-category p {
+    color: #6c757d;
+}
+
+.theme-auto .manus-gdpr-close {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.theme-auto .manus-gdpr-close:hover {
+    background: #e9ecef;
+    color: #495057;
+}
