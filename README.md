@@ -1,6 +1,6 @@
 ![Rubik GDPR Cookie Consent Cover](https://matteomorreale.it/wp-content/uploads/2025/06/Free-GDPR-Cookie-Consent.jpg)
 
-# Rubik GDPR Cookie Consent 🍪
+# Rubik FREE GDPR Cookie Consent 🍪
 
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
