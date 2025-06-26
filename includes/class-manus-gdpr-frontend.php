@@ -51,6 +51,7 @@ class Manus_GDPR_Frontend {
         $this->version = $version;
 
         // Add cookie blocking functionality
+        add_action( 'wp_head', array( $this, 'add_global_utility_functions' ), 0 );  // Highest priority
         add_action( 'wp_head', array( $this, 'add_cookie_blocking_script' ), 1 );
         add_action( 'wp_head', array( $this, 'add_tcf_v2_script' ), 2 );
         add_action( 'wp_head', array( $this, 'add_adsense_blocking_script' ), 3 );
@@ -1153,6 +1154,68 @@ class Manus_GDPR_Frontend {
             });
             
         })();
+        </script>
+        <?php
+    }
+
+    /**
+     * Add global utility functions that need to be available everywhere
+     */
+    public function add_global_utility_functions() {
+        ?>
+        <script type="text/javascript">
+        // Global GDPR utility functions - Available to all scripts
+        window.getCookie = window.getCookie || function(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length === 2) {
+                return parts.pop().split(";").shift();
+            }
+            return null;
+        };
+
+        window.setCookie = window.setCookie || function(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        };
+
+        // Helper function for GDPR consent checking - Available globally
+        window.hasGDPRConsent = function(category) {
+            var consent = getCookie('manus_gdpr_consent');
+            var consentData = getCookie('manus_gdpr_consent_data');
+            
+            if (!consent) return false;
+            
+            try {
+                if (consentData) {
+                    var decodedData = decodeURIComponent(consentData);
+                    var parsedData = JSON.parse(decodedData);
+                    if (parsedData && parsedData.data) {
+                        return parsedData.data[category] === true;
+                    }
+                }
+                
+                // Fallback to simple consent
+                if (consent === 'accepted') return true;
+                if (consent === 'rejected') return category === 'necessary';
+                
+                try {
+                    var parsed = JSON.parse(decodeURIComponent(consent));
+                    return parsed[category] === true;
+                } catch (e) {
+                    return false;
+                }
+            } catch (e) {
+                return false;
+            }
+        };
+
+        console.log('GDPR: Global utility functions loaded');
         </script>
         <?php
     }

@@ -1,4 +1,28 @@
 jQuery(document).ready(function($) {
+    // Make utility functions globally available
+    window.getCookie = function(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length === 2) {
+            return parts.pop().split(";").shift();
+        }
+        return null;
+    };
+
+    // Helper function to set cookie value
+    window.setCookie = function(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    };
+
+    // Local aliases for internal use
+    var getCookie = window.getCookie;
+    var setCookie = window.setCookie;
     // Show overlay when banner is present
     function showOverlay() {
         var $overlay = $('.manus-gdpr-overlay');
@@ -343,27 +367,6 @@ jQuery(document).ready(function($) {
             // Banner is visible, don't show floating icon
             hideFloatingIcon();
         }
-    }
-
-    // Helper function to get cookie value
-    function getCookie(name) {
-        var value = "; " + document.cookie;
-        var parts = value.split("; " + name + "=");
-        if (parts.length === 2) {
-            return parts.pop().split(";").shift();
-        }
-        return null;
-    }
-
-    // Helper function to set cookie value
-    function setCookie(name, value, days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
     }
 
     // Get current consent data from cookie

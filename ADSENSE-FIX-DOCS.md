@@ -4,24 +4,58 @@
 
 Il plugin aveva un problema con la gestione del consenso per Google AdSense: quando l'utente cliccava su "Rifiuta", le pubblicità venivano comunque caricate perché il segnale TCF (Transparency and Consent Framework) IAB non veniva gestito correttamente.
 
-## 🚀 Aggiornamenti v1.0.8 (LATEST)
+## 🚀 Aggiornamenti v1.0.9 (LATEST)
 
-### ✅ **Nuove Correzioni**
+### 🔧 **Correzioni Critiche**
 
-#### 1. **Errore JavaScript `setCookie is not defined`**
-**Errore risolto:** `Uncaught ReferenceError: setCookie is not defined`
+#### 1. **Funzioni Globali Non Definite**
+**Errori risolti:**
+- `Uncaught ReferenceError: getCookie is not defined`
+- `Uncaught ReferenceError: setCookie is not defined` 
 
-**Soluzione:** Riorganizzata la struttura delle funzioni JavaScript per garantire la disponibilità di `setCookie`.
+**Problema:** Le funzioni `getCookie` e `setCookie` erano disponibili solo nel contesto del plugin, ma venivano chiamate da script esterni (LiteSpeed, altri plugin, temi).
 
-#### 2. **Ricaricamento Automatico per Pubblicità** 🔄
-**Nuova funzionalità:** Quando l'utente modifica le sue preferenze e abilita le pubblicità, la pagina viene automaticamente ricaricata.
+**Soluzione:**
+- Rese globali `window.getCookie` e `window.setCookie`
+- Aggiunta nella `<head>` con priorità massima (prima di tutti gli altri script)
+- Disponibili a **tutti** gli script della pagina
+
+#### 2. **Nuova Funzione Helper Globale** 🆕
+**Nuova funzione:** `window.hasGDPRConsent(category)`
+
+**Utilizzo per sviluppatori:**
+```javascript
+// Verifica consenso pubblicitario
+if (window.hasGDPRConsent('advertising')) {
+    // Carica script pubblicitari
+}
+
+// Verifica consenso analytics
+if (window.hasGDPRConsent('analytics')) {
+    // Inizializza tracking
+}
+```
+
+#### 3. **Compatibilità Universale** ✨
+- **LiteSpeed Cache:** Risolti errori con script delayed
+- **Temi e Plugin:** Funzioni disponibili ovunque
+- **Script Inline:** Accesso garantito alle utility GDPR
+
+---
+
+## 🚀 Aggiornamenti v1.0.8
+
+### ✅ **Correzioni Precedenti**
+
+#### 1. **Ricaricamento Automatico per Pubblicità** 🔄
+**Funzionalità:** Quando l'utente modifica le sue preferenze e abilita le pubblicità, la pagina viene automaticamente ricaricata.
 
 **Come funziona:**
 - Controllo se il consenso pubblicitario cambia da `false` a `true`
 - Notifica visiva: "✓ Consenso salvato! Ricaricamento per abilitare le pubblicità..."
 - Ricaricamento automatico dopo 1.5 secondi
 
-#### 3. **Esperienza Utente Migliorata** ✨
+#### 2. **Esperienza Utente Migliorata** ✨
 - Notifica di conferma prima del reload
 - Feedback visivo chiaro sulle azioni
 - Gestione intelligente dei cambiamenti di consenso

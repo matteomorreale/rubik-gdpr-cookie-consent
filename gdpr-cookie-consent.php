@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Rubik GDPR Cookie Consent
  * Description: Custom plugin for cookie consent management and GDPR compliance, compatible with Google AdSense.
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Matteo Morreale
  * Author URI:        https://matteomorreale.it
  * Author URI: https://github.com/matteomorreale
@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'MANUS_GDPR_VERSION', '1.0.8' );
+define( 'MANUS_GDPR_VERSION', '1.0.9' );
 define( 'MANUS_GDPR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MANUS_GDPR_URL', plugin_dir_url( __FILE__ ) );
 
