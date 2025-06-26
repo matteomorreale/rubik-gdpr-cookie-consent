@@ -4,7 +4,31 @@
 
 Il plugin aveva un problema con la gestione del consenso per Google AdSense: quando l'utente cliccava su "Rifiuta", le pubblicità venivano comunque caricate perché il segnale TCF (Transparency and Consent Framework) IAB non veniva gestito correttamente.
 
-## Errori Corretti nella v1.0.7
+## 🚀 Aggiornamenti v1.0.8 (LATEST)
+
+### ✅ **Nuove Correzioni**
+
+#### 1. **Errore JavaScript `setCookie is not defined`**
+**Errore risolto:** `Uncaught ReferenceError: setCookie is not defined`
+
+**Soluzione:** Riorganizzata la struttura delle funzioni JavaScript per garantire la disponibilità di `setCookie`.
+
+#### 2. **Ricaricamento Automatico per Pubblicità** 🔄
+**Nuova funzionalità:** Quando l'utente modifica le sue preferenze e abilita le pubblicità, la pagina viene automaticamente ricaricata.
+
+**Come funziona:**
+- Controllo se il consenso pubblicitario cambia da `false` a `true`
+- Notifica visiva: "✓ Consenso salvato! Ricaricamento per abilitare le pubblicità..."
+- Ricaricamento automatico dopo 1.5 secondi
+
+#### 3. **Esperienza Utente Migliorata** ✨
+- Notifica di conferma prima del reload
+- Feedback visivo chiaro sulle azioni
+- Gestione intelligente dei cambiamenti di consenso
+
+---
+
+## Errori Corretti nelle Versioni Precedenti
 
 ### 1. **Parsing Cookie URL-Encoded**
 **Errore:** `SyntaxError: Unexpected token '%', "%7B%22stat"... is not valid JSON`

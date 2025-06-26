@@ -99,6 +99,9 @@ jQuery(document).ready(function($) {
     $(document).on('click', '#manus-gdpr-save-preferences', function(e) {
         e.preventDefault();
 
+        // Get current consent before changes
+        var previousConsent = getCurrentConsentData();
+
         var consentData = {
             necessary: true // Always true
         };
@@ -121,6 +124,12 @@ jQuery(document).ready(function($) {
             consentStatus = 'accepted';
         } else if (allRejected) {
             consentStatus = 'rejected';
+        }
+
+        // Check if advertising consent was just enabled
+        if (!previousConsent.advertising && consentData.advertising) {
+            console.log('GDPR: Advertising enabled in preferences, will reload after save');
+            window.gdprShouldReload = true;
         }
 
         recordConsent(consentStatus, consentData);
@@ -177,6 +186,14 @@ jQuery(document).ready(function($) {
                                         }
                                     });
                                 }
+                            } else if (consentData.advertising) {
+                                // Check if advertising consent was just enabled
+                                var previousConsent = getCurrentConsentData();
+                                if (!previousConsent.advertising) {
+                                    console.log('GDPR: Advertising consent enabled, reloading page to load ads');
+                                    // Set a flag to reload after the AJAX request completes
+                                    window.gdprShouldReload = true;
+                                }
                             }
                         }
                         
@@ -205,7 +222,37 @@ jQuery(document).ready(function($) {
                                         }
                                     });
                                 }
+                                
+                                // Reload page if advertising was just enabled
+                                if (window.gdprShouldReload) {
+                                    window.gdprShouldReload = false;
+                                    
+                                    // Show a brief notification before reload
+                                    var notification = document.createElement('div');
+                                    notification.style.cssText = 'position:fixed;top:20px;right:20px;background:#28a745;color:white;padding:15px 20px;border-radius:8px;z-index:999999;font-family:sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+                                    notification.innerHTML = '✓ Consenso salvato! Ricaricamento per abilitare le pubblicità...';
+                                    document.body.appendChild(notification);
+                                    
+                                    setTimeout(function() {
+                                        console.log('GDPR: Reloading page to load advertisements');
+                                        window.location.reload();
+                                    }, 1500); // Increased delay to show notification
+                                }
                             }, 100);
+                        } else if (window.gdprShouldReload) {
+                            // Fallback if TCF is not available
+                            window.gdprShouldReload = false;
+                            
+                            // Show notification
+                            var notification = document.createElement('div');
+                            notification.style.cssText = 'position:fixed;top:20px;right:20px;background:#28a745;color:white;padding:15px 20px;border-radius:8px;z-index:999999;font-family:sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+                            notification.innerHTML = '✓ Consenso salvato! Ricaricamento per abilitare le pubblicità...';
+                            document.body.appendChild(notification);
+                            
+                            setTimeout(function() {
+                                console.log('GDPR: Reloading page to load advertisements (no TCF)');
+                                window.location.reload();
+                            }, 1500);
                         }
                     
                     // Don't reload page, just update the UI
@@ -306,6 +353,17 @@ jQuery(document).ready(function($) {
             return parts.pop().split(";").shift();
         }
         return null;
+    }
+
+    // Helper function to set cookie value
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
     }
 
     // Get current consent data from cookie
