@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Rubik GDPR Cookie Consent
  * Description: Custom plugin for cookie consent management and GDPR compliance, compatible with Google AdSense.
- * Version: 1.0.5
+ * Version: 1.0.7
  * Author: Matteo Morreale
  * Author URI:        https://matteomorreale.it
  * Author URI: https://github.com/matteomorreale
@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'MANUS_GDPR_VERSION', '1.0.4' );
+define( 'MANUS_GDPR_VERSION', '1.0.7' );
 define( 'MANUS_GDPR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MANUS_GDPR_URL', plugin_dir_url( __FILE__ ) );
 
@@ -98,3 +98,45 @@ function deactivate_manus_gdpr() {
     Manus_GDPR_Deactivator::deactivate();
 }
 register_deactivation_hook( __FILE__, 'deactivate_manus_gdpr' );
+
+/**
+ * Debug function to test GDPR consent behavior
+ * Add ?gdpr_debug=1 to any URL to see consent status
+ */
+function manus_gdpr_debug_info() {
+    if ( isset( $_GET['gdpr_debug'] ) && current_user_can( 'manage_options' ) ) {
+        echo '<div style="position: fixed; top: 10px; right: 10px; background: white; padding: 15px; border: 2px solid #333; z-index: 999999; font-family: monospace; font-size: 12px; max-width: 400px;">';
+        echo '<h4>GDPR Debug Info</h4>';
+        echo '<strong>Consent Cookie:</strong> ' . ( isset( $_COOKIE['manus_gdpr_consent'] ) ? $_COOKIE['manus_gdpr_consent'] : 'Not set' ) . '<br>';
+        echo '<strong>Consent Data Cookie:</strong> ' . ( isset( $_COOKIE['manus_gdpr_consent_data'] ) ? $_COOKIE['manus_gdpr_consent_data'] : 'Not set' ) . '<br>';
+        echo '<strong>Time:</strong> ' . date( 'Y-m-d H:i:s' ) . '<br>';
+        
+        if ( isset( $_COOKIE['manus_gdpr_consent_data'] ) ) {
+            $consent_data = json_decode( $_COOKIE['manus_gdpr_consent_data'], true );
+            if ( $consent_data && isset( $consent_data['data'] ) ) {
+                echo '<strong>Advertising Consent:</strong> ' . ( $consent_data['data']['advertising'] ? 'YES' : 'NO' ) . '<br>';
+                echo '<strong>Analytics Consent:</strong> ' . ( $consent_data['data']['analytics'] ? 'YES' : 'NO' ) . '<br>';
+                echo '<strong>Functional Consent:</strong> ' . ( $consent_data['data']['functional'] ? 'YES' : 'NO' ) . '<br>';
+            }
+        }
+        
+        echo '<hr><small>Add ?gdpr_debug=1 to URL to see this info</small>';
+        echo '</div>';
+        
+        // Add JavaScript debug info
+        echo '<script>
+        console.group("GDPR Debug Info");
+        console.log("Consent cookie:", document.cookie.match(/manus_gdpr_consent=([^;]+)/));
+        console.log("Consent data cookie:", document.cookie.match(/manus_gdpr_consent_data=([^;]+)/));
+        if (typeof window.__tcfapi === "function") {
+            window.__tcfapi("getTCData", 2, function(tcData, success) {
+                console.log("TCF Data:", tcData);
+                console.log("Purpose consents:", tcData ? tcData.purpose.consents : "No TCF data");
+                console.log("Vendor consents:", tcData ? tcData.vendor.consents : "No vendor data");
+            });
+        }
+        console.groupEnd();
+        </script>';
+    }
+}
+add_action( 'wp_footer', 'manus_gdpr_debug_info' );

@@ -152,28 +152,61 @@ jQuery(document).ready(function($) {
                         showFloatingIcon();
                     });
                     
-                    // Emit TCF event for IAB compatibility
-                    var tcfEvent = new CustomEvent('manus-gdpr-consent-updated', {
-                        detail: {
-                            consentStatus: consentStatus,
-                            consentData: consentData
-                        }
-                    });
-                    document.dispatchEvent(tcfEvent);
-                    
-                    // Update TCF API if available
-                    if (typeof window.__tcfapi === 'function') {
-                        console.log('GDPR Cookie Consent: Updating TCF API with new consent');
-                        
-                        // Trigger TCF update
-                        setTimeout(function() {
-                            if (window.__tcfapi.eventListeners && window.__tcfapi.eventListeners.length > 0) {
-                                window.__tcfapi.eventListeners.forEach(function(listener) {
-                                    window.__tcfapi('getTCData', 2, listener.callback, listener.id);
+                        // Update cookie blocking system
+                        if (window.ManusGDPRCookieBlocker) {
+                            if (consentStatus === 'rejected' || 
+                                (consentStatus === 'partial' && !consentData.advertising)) {
+                                console.log('GDPR: Clearing blocked cookies and content');
+                                window.ManusGDPRCookieBlocker.clearBlockedCookies();
+                                
+                                // Remove AdSense elements if advertising consent is denied
+                                var adsenseElements = document.querySelectorAll('.adsbygoogle, ins.adsbygoogle');
+                                adsenseElements.forEach(function(element) {
+                                    if (element.parentNode) {
+                                        element.style.display = 'none';
+                                        element.innerHTML = '<div style="padding: 20px; text-align: center; border: 1px solid #ddd; background: #f9f9f9; color: #666;">Pubblicità bloccata - Consenso pubblicitario rifiutato</div>';
+                                    }
                                 });
+                                
+                                // Block Google Ad Manager slots
+                                if (window.googletag && window.googletag.cmd) {
+                                    window.googletag.cmd.push(function() {
+                                        if (window.googletag.pubads) {
+                                            console.log('GDPR: Clearing Google Ad Manager slots');
+                                            window.googletag.pubads().clear();
+                                        }
+                                    });
+                                }
                             }
-                        }, 100);
-                    }
+                        }
+                        
+                        // Update TCF API if available
+                        if (typeof window.__tcfapi === 'function') {
+                            console.log('GDPR Cookie Consent: Updating TCF API with new consent');
+                            
+                            // Trigger TCF update with a small delay to ensure cookie is set
+                            setTimeout(function() {
+                                // Dispatch custom event for TCF update
+                                var tcfEvent = new CustomEvent('manus-gdpr-consent-updated', {
+                                    detail: {
+                                        consentStatus: consentStatus,
+                                        consentData: consentData
+                                    }
+                                });
+                                document.dispatchEvent(tcfEvent);
+                                
+                                // Force TCF API update
+                                if (window.__tcfapi.eventListeners && window.__tcfapi.eventListeners.length > 0) {
+                                    window.__tcfapi.eventListeners.forEach(function(listener) {
+                                        try {
+                                            window.__tcfapi('getTCData', 2, listener.callback, listener.id);
+                                        } catch (e) {
+                                            console.error('GDPR: Error updating TCF listener:', e);
+                                        }
+                                    });
+                                }
+                            }, 100);
+                        }
                     
                     // Don't reload page, just update the UI
                     console.log('GDPR Cookie Consent: Consent recorded successfully', consentData);
@@ -292,6 +325,29 @@ jQuery(document).ready(function($) {
             return defaultData;
         }
         
+        // Handle detailed consent data cookie first
+        if (consentDataCookie) {
+            try {
+                // Try to decode URL-encoded cookie data
+                var decodedData = decodeURIComponent(consentDataCookie);
+                var parsedData = JSON.parse(decodedData);
+                if (parsedData && parsedData.data) {
+                    return Object.assign(defaultData, parsedData.data);
+                }
+            } catch (e) {
+                console.warn('GDPR: Error parsing consent data cookie (trying fallback):', e);
+                // Try without decoding
+                try {
+                    var parsedData = JSON.parse(consentDataCookie);
+                    if (parsedData && parsedData.data) {
+                        return Object.assign(defaultData, parsedData.data);
+                    }
+                } catch (e2) {
+                    console.warn('GDPR: Could not parse consent data cookie at all:', e2);
+                }
+            }
+        }
+        
         // Handle simple accept/reject values
         if (consentCookie === 'accepted') {
             return {
@@ -304,27 +360,21 @@ jQuery(document).ready(function($) {
             return defaultData; // All false except necessary
         }
         
-        // Handle detailed consent data
-        if (consentDataCookie) {
-            try {
-                var parsedData = JSON.parse(decodeURIComponent(consentDataCookie));
-                if (parsedData && parsedData.data) {
-                    return Object.assign(defaultData, parsedData.data);
-                }
-            } catch (e) {
-                console.warn('Could not parse consent data cookie:', e);
-            }
-        }
-        
         // Try to parse consent cookie directly if it's JSON
         try {
-            var parsed = JSON.parse(decodeURIComponent(consentCookie));
+            var decodedConsent = decodeURIComponent(consentCookie);
+            var parsed = JSON.parse(decodedConsent);
             return Object.assign(defaultData, parsed);
         } catch (e) {
-            // Not JSON, return default
+            // Try without decoding
+            try {
+                var parsed = JSON.parse(consentCookie);
+                return Object.assign(defaultData, parsed);
+            } catch (e2) {
+                // Not JSON, return default
+                return defaultData;
+            }
         }
-        
-        return defaultData;
     }
 
     // Apply current consent state to modal checkboxes
@@ -388,7 +438,73 @@ jQuery(document).ready(function($) {
     $(document).ready(function() {
         // Delay to ensure all CSS is loaded
         setTimeout(checkConsentStatus, 1000);
+        
+        // Initialize AdSense monitoring if needed
+        initAdBlockingMonitor();
     });
+
+    // Function to monitor and block AdSense elements dynamically
+    function initAdBlockingMonitor() {
+        // Only run if MutationObserver is available
+        if (typeof MutationObserver === 'undefined') {
+            return;
+        }
+        
+        // Check for AdSense elements every time the DOM changes
+        var observer = new MutationObserver(function(mutations) {
+            var shouldBlock = shouldBlockAds();
+            
+            if (shouldBlock) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            // Check for AdSense elements
+                            if (node.classList && (node.classList.contains('adsbygoogle') || 
+                                node.tagName === 'INS' && node.getAttribute('class') && 
+                                node.getAttribute('class').includes('adsbygoogle'))) {
+                                blockAdElement(node);
+                            }
+                            
+                            // Check for AdSense elements in children
+                            var adsenseElements = node.querySelectorAll && node.querySelectorAll('.adsbygoogle, ins[class*="adsbygoogle"]');
+                            if (adsenseElements) {
+                                adsenseElements.forEach(blockAdElement);
+                            }
+                        }
+                    });
+                });
+            }
+        });
+        
+        // Start observing
+        observer.observe(document.body, { 
+            childList: true, 
+            subtree: true 
+        });
+        
+        // Initial check for existing ads
+        setTimeout(function() {
+            if (shouldBlockAds()) {
+                var existingAds = document.querySelectorAll('.adsbygoogle, ins[class*="adsbygoogle"]');
+                existingAds.forEach(blockAdElement);
+            }
+        }, 500);
+    }
+    
+    // Function to check if ads should be blocked
+    function shouldBlockAds() {
+        var currentConsent = getCurrentConsentData();
+        return !currentConsent.advertising;
+    }
+    
+    // Function to block a single ad element
+    function blockAdElement(element) {
+        if (element && element.style) {
+            element.style.display = 'none';
+            element.innerHTML = '<div style="padding: 20px; text-align: center; border: 1px solid #ddd; background: #f9f9f9; color: #666; font-family: Arial, sans-serif; font-size: 14px;">📢 Pubblicità bloccata<br><small>Consenso pubblicitario necessario</small></div>';
+            console.log('GDPR: Blocked AdSense element', element);
+        }
+    }
 
     // Make floating icon keyboard accessible
     $(document).on('keydown', '#manus-gdpr-floating-icon', function(e) {

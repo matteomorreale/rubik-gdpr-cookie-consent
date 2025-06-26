@@ -53,6 +53,7 @@ class Manus_GDPR_Frontend {
         // Add cookie blocking functionality
         add_action( 'wp_head', array( $this, 'add_cookie_blocking_script' ), 1 );
         add_action( 'wp_head', array( $this, 'add_tcf_v2_script' ), 2 );
+        add_action( 'wp_head', array( $this, 'add_adsense_blocking_script' ), 3 );
         add_action( 'wp_footer', array( $this, 'add_cookie_scanner_integration' ), 999 );
     }
 
@@ -299,12 +300,36 @@ class Manus_GDPR_Frontend {
                                        (value.includes('googletagmanager') || 
                                         value.includes('google-analytics') ||
                                         value.includes('googlesyndication') ||
+                                        value.includes('googleadservices') ||
+                                        value.includes('doubleclick') ||
                                         value.includes('facebook.net') ||
                                         value.includes('fbcdn.net'));
                             });
                             
-                            if (shouldBlockScript) {
-                                console.log('Blocked script:', value);
+                            // Also check current consent status
+                            const currentConsent = getCookie('manus_gdpr_consent');
+                            const currentConsentData = getCookie('manus_gdpr_consent_data');
+                            let shouldBlock = shouldBlockScript;
+                            
+                            if (!shouldBlock && (value.includes('googlesyndication') || value.includes('googleadservices'))) {
+                                // Special handling for AdSense scripts
+                                try {
+                                    if (currentConsentData) {
+                                        const consentData = JSON.parse(currentConsentData);
+                                        shouldBlock = !consentData.data.advertising;
+                                    } else if (currentConsent) {
+                                        shouldBlock = currentConsent === 'rejected' || 
+                                                    (currentConsent !== 'accepted' && currentConsent !== 'partial');
+                                    } else {
+                                        shouldBlock = true; // Block by default if no consent
+                                    }
+                                } catch (e) {
+                                    shouldBlock = true; // Block by default on error
+                                }
+                            }
+                            
+                            if (shouldBlock) {
+                                console.log('Blocked script (GDPR):', value);
                                 return; // Don't set the src attribute
                             }
                         }
@@ -498,21 +523,72 @@ class Manus_GDPR_Frontend {
             // Generate or retrieve TC String from cookie consent
             function generateTCString() {
                 var consent = getCookie('manus_gdpr_consent');
+                var consentDataCookie = getCookie('manus_gdpr_consent_data');
                 var consentData = {};
                 
                 try {
-                    if (consent && consent !== 'accepted' && consent !== 'rejected') {
-                        consentData = JSON.parse(consent);
-                    } else {
-                        // Simple mapping for basic accept/reject
+                    // First try to get detailed consent data with proper URL decoding
+                    if (consentDataCookie) {
+                        try {
+                            // Decode URL-encoded cookie data
+                            var decodedData = decodeURIComponent(consentDataCookie);
+                            var parsedConsentData = JSON.parse(decodedData);
+                            if (parsedConsentData && parsedConsentData.data) {
+                                consentData = parsedConsentData.data;
+                            }
+                        } catch (e) {
+                            console.warn('GDPR TCF: Error parsing consent data cookie (trying fallback):', e);
+                            // Try without decoding
+                            try {
+                                var parsedConsentData = JSON.parse(consentDataCookie);
+                                if (parsedConsentData && parsedConsentData.data) {
+                                    consentData = parsedConsentData.data;
+                                }
+                            } catch (e2) {
+                                console.warn('GDPR TCF: Could not parse consent data cookie at all:', e2);
+                            }
+                        }
+                    } 
+                    
+                    // If still no data, try the main consent cookie
+                    if (Object.keys(consentData).length === 0 && consent) {
+                        try {
+                            if (consent !== 'accepted' && consent !== 'rejected') {
+                                // Try to decode and parse if it's JSON
+                                var decodedConsent = decodeURIComponent(consent);
+                                consentData = JSON.parse(decodedConsent);
+                            } else {
+                                // Simple mapping for basic accept/reject
+                                consentData = {
+                                    necessary: true,
+                                    analytics: consent === 'accepted',
+                                    advertising: consent === 'accepted',
+                                    functional: consent === 'accepted'
+                                };
+                            }
+                        } catch (e) {
+                            console.warn('GDPR TCF: Error parsing main consent cookie:', e);
+                            // Final fallback - simple accept/reject mapping
+                            consentData = {
+                                necessary: true,
+                                analytics: consent === 'accepted',
+                                advertising: consent === 'accepted',
+                                functional: consent === 'accepted'
+                            };
+                        }
+                    }
+                    
+                    // Final fallback if no consent data at all
+                    if (Object.keys(consentData).length === 0) {
                         consentData = {
                             necessary: true,
-                            analytics: consent === 'accepted',
-                            advertising: consent === 'accepted',
-                            functional: consent === 'accepted'
+                            analytics: false,
+                            advertising: false,
+                            functional: false
                         };
                     }
                 } catch (e) {
+                    console.warn('GDPR TCF: Error parsing consent data, defaulting to reject all:', e);
                     consentData = {
                         necessary: true,
                         analytics: false,
@@ -521,30 +597,69 @@ class Manus_GDPR_Frontend {
                     };
                 }
                 
-                // Simplified TC String generation (in production, use proper IAB library)
+                // Log consent data for debugging
+                console.log('GDPR TCF: Generating TC String with consent data:', consentData);
+                
+                // Enhanced TC String generation with proper consent handling
                 var purposes = '';
                 var vendors = '';
                 
-                // Purpose consents (10 purposes in TCF v2)
-                for (var i = 1; i <= 10; i++) {
-                    if (i === 1) { // Storage and access
-                        purposes += consentData.necessary ? '1' : '0';
-                    } else if (i <= 5) { // Basic ads and personalization
-                        purposes += consentData.advertising ? '1' : '0';
-                    } else if (i <= 7) { // Analytics
-                        purposes += consentData.analytics ? '1' : '0';
-                    } else { // Other purposes
-                        purposes += consentData.functional ? '1' : '0';
+                // Purpose consents (10 standard TCF purposes)
+                var purposeMapping = [
+                    consentData.necessary === true,      // 1: Store and/or access information on a device
+                    consentData.advertising === true,    // 2: Select basic ads
+                    consentData.advertising === true,    // 3: Create a personalised ads profile
+                    consentData.advertising === true,    // 4: Select personalised ads
+                    consentData.advertising === true,    // 5: Create a personalised content profile
+                    consentData.functional === true,     // 6: Select personalised content
+                    consentData.analytics === true,      // 7: Measure ad performance
+                    consentData.analytics === true,      // 8: Measure content performance
+                    consentData.analytics === true,      // 9: Apply market research to generate audience insights
+                    consentData.functional === true      // 10: Develop and improve products
+                ];
+                
+                // Convert boolean array to binary string
+                purposes = purposeMapping.map(function(consent) { return consent ? '1' : '0'; }).join('');
+                
+                // Google AdSense vendor consents - specifically handle Google (vendor 755)
+                // For simplicity, we'll create a basic vendor consent string
+                var vendorConsents = [];
+                for (var v = 1; v <= 755; v++) {
+                    if (v === 755) { // Google
+                        vendorConsents.push(consentData.advertising === true ? '1' : '0');
+                    } else if (v <= 100) { // Other major vendors
+                        vendorConsents.push(consentData.advertising === true ? '1' : '0');
+                    } else {
+                        vendorConsents.push('0'); // Default deny for unknown vendors
                     }
                 }
+                vendors = vendorConsents.join('');
                 
-                // Vendor consents (simplified - would need real vendor list)
-                for (var v = 1; v <= 100; v++) {
-                    vendors += consentData.advertising ? '1' : '0';
-                }
+                // Create a proper TC string format (simplified)
+                var tcStringData = {
+                    version: 2,
+                    created: Math.floor(Date.now() / 1000),
+                    lastUpdated: Math.floor(Date.now() / 1000),
+                    cmpId: 1,
+                    cmpVersion: 1,
+                    consentScreen: 1,
+                    consentLanguage: 'IT',
+                    vendorListVersion: 1,
+                    tcfPolicyVersion: 4,
+                    isServiceSpecific: false,
+                    useNonStandardStacks: false,
+                    purposes: purposes,
+                    vendors: vendors.substring(0, 100) // Limit vendor string length
+                };
                 
-                // This is a simplified TC string - in production use IAB's official encoder
-                return 'CP' + btoa(purposes + vendors).replace(/=/g, '').substring(0, 50);
+                // Generate base64 encoded TC string (simplified format)
+                var tcString = 'CP' + btoa(JSON.stringify(tcStringData)).replace(/[^A-Za-z0-9]/g, '').substring(0, 87);
+                
+                console.log('GDPR TCF: Generated TC String:', tcString);
+                console.log('GDPR TCF: Purpose consents:', purposes);
+                console.log('GDPR TCF: Vendor consents (first 20):', vendors.substring(0, 20));
+                
+                return tcString;
             }
             
             function getCookie(name) {
@@ -576,6 +691,7 @@ class Manus_GDPR_Frontend {
             
             function handleGetTCData(version, callback, parameter) {
                 var consent = getCookie('manus_gdpr_consent');
+                var consentDataCookie = getCookie('manus_gdpr_consent_data');
                 var tcString = generateTCString();
                 
                 var tcData = {
@@ -616,31 +732,92 @@ class Manus_GDPR_Frontend {
                 
                 // Fill purpose consents based on GDPR Cookie Consent settings
                 try {
-                    var consentData = consent && consent !== 'accepted' && consent !== 'rejected' 
-                        ? JSON.parse(consent)
-                        : {
-                            necessary: true,
-                            analytics: consent === 'accepted',
-                            advertising: consent === 'accepted',
-                            functional: consent === 'accepted'
-                        };
+                    var consentData = {};
+                    
+                    // Get consent data from the detailed cookie first with proper URL decoding
+                    if (consentDataCookie) {
+                        try {
+                            // Decode URL-encoded cookie data
+                            var decodedData = decodeURIComponent(consentDataCookie);
+                            var parsedConsentData = JSON.parse(decodedData);
+                            if (parsedConsentData && parsedConsentData.data) {
+                                consentData = parsedConsentData.data;
+                            }
+                        } catch (e) {
+                            console.warn('GDPR TCF: Error parsing consent data cookie (trying fallback):', e);
+                            // Try without decoding
+                            try {
+                                var parsedConsentData = JSON.parse(consentDataCookie);
+                                if (parsedConsentData && parsedConsentData.data) {
+                                    consentData = parsedConsentData.data;
+                                }
+                            } catch (e2) {
+                                console.warn('GDPR TCF: Could not parse consent data cookie at all:', e2);
+                            }
+                        }
+                    }
+                    
+                    // Fallback to simple consent mapping if no detailed data
+                    if (Object.keys(consentData).length === 0) {
+                        if (consent && consent !== 'accepted' && consent !== 'rejected') {
+                            try {
+                                var decodedConsent = decodeURIComponent(consent);
+                                consentData = JSON.parse(decodedConsent);
+                            } catch (e) {
+                                console.warn('GDPR TCF: Error parsing main consent cookie:', e);
+                                consentData = {};
+                            }
+                        }
                         
-                    // Map to TCF purposes
-                    tcData.purpose.consents[1] = consentData.necessary; // Store and/or access info
-                    tcData.purpose.consents[2] = consentData.advertising; // Select basic ads
-                    tcData.purpose.consents[3] = consentData.advertising; // Create personalized ads profile
-                    tcData.purpose.consents[4] = consentData.advertising; // Select personalized ads
-                    tcData.purpose.consents[5] = consentData.advertising; // Create personalized content profile
-                    tcData.purpose.consents[6] = consentData.functional; // Select personalized content
-                    tcData.purpose.consents[7] = consentData.analytics; // Measure ad performance
-                    tcData.purpose.consents[8] = consentData.analytics; // Measure content performance
-                    tcData.purpose.consents[9] = consentData.analytics; // Apply market research
-                    tcData.purpose.consents[10] = consentData.functional; // Develop and improve products
+                        // Final fallback - simple accept/reject mapping
+                        if (Object.keys(consentData).length === 0) {
+                            consentData = {
+                                necessary: true,
+                                analytics: consent === 'accepted',
+                                advertising: consent === 'accepted',
+                                functional: consent === 'accepted'
+                            };
+                        }
+                    }
+                    
+                    console.log('GDPR TCF: Using consent data for TCF response:', consentData);
+                    
+                    // Map to TCF purposes with explicit boolean values
+                    tcData.purpose.consents[1] = consentData.necessary === true; // Store and/or access info
+                    tcData.purpose.consents[2] = consentData.advertising === true; // Select basic ads
+                    tcData.purpose.consents[3] = consentData.advertising === true; // Create personalized ads profile
+                    tcData.purpose.consents[4] = consentData.advertising === true; // Select personalized ads
+                    tcData.purpose.consents[5] = consentData.advertising === true; // Create personalized content profile
+                    tcData.purpose.consents[6] = consentData.functional === true; // Select personalized content
+                    tcData.purpose.consents[7] = consentData.analytics === true; // Measure ad performance
+                    tcData.purpose.consents[8] = consentData.analytics === true; // Measure content performance
+                    tcData.purpose.consents[9] = consentData.analytics === true; // Apply market research
+                    tcData.purpose.consents[10] = consentData.functional === true; // Develop and improve products
+                    
+                    // Vendor consents - explicitly set Google (755) and other major ad vendors
+                    // Google AdSense and other Google advertising services
+                    tcData.vendor.consents[755] = consentData.advertising === true; // Google
+                    tcData.vendor.consents[1] = consentData.advertising === true; // Other advertising vendors
+                    tcData.vendor.consents[2] = consentData.advertising === true;
+                    tcData.vendor.consents[3] = consentData.advertising === true;
+                    
+                    // Explicitly set other vendors based on advertising consent
+                    for (var v = 1; v <= 800; v++) {
+                        tcData.vendor.consents[v] = consentData.advertising === true;
+                    }
+                    
+                    console.log('GDPR TCF: Final TCF purpose consents:', tcData.purpose.consents);
+                    console.log('GDPR TCF: Final TCF vendor consents (Google 755):', tcData.vendor.consents[755]);
                     
                 } catch (e) {
-                    // Default to no consent except necessary
+                    console.error('GDPR TCF: Error processing consent data:', e);
+                    // Default to no consent except necessary if there's an error
                     for (var p = 1; p <= 10; p++) {
                         tcData.purpose.consents[p] = p === 1; // Only storage consent
+                    }
+                    // Explicitly deny all vendor consents
+                    for (var v = 1; v <= 800; v++) {
+                        tcData.vendor.consents[v] = false;
                     }
                 }
                 
@@ -706,12 +883,79 @@ class Manus_GDPR_Frontend {
             
             // Update status when consent changes
             function updateTCFStatus() {
+                var consent = getCookie('manus_gdpr_consent');
                 window.__tcfapi.cmpStatus = 'loaded';
-                window.__tcfapi.displayStatus = getCookie('manus_gdpr_consent') ? 'hidden' : 'visible';
+                window.__tcfapi.displayStatus = consent ? 'hidden' : 'visible';
                 
-                // Notify all event listeners
-                window.__tcfapi.eventListeners.forEach(function(listener) {
-                    handleGetTCData(2, listener.callback, listener.id);
+                console.log('GDPR TCF: Updating TCF status, consent:', consent);
+                
+                // Force regenerate TCF data with current consent
+                var tcString = generateTCString();
+                
+                // Update global TCF data
+                handleGetTCData(2, function(tcData, success) {
+                    if (success && tcData) {
+                        window.__tcfapi.tcData = tcData;
+                        console.log('GDPR TCF: Updated TCF data:', tcData);
+                        
+                        // Notify all event listeners with updated data
+                        window.__tcfapi.eventListeners.forEach(function(listener) {
+                            try {
+                                listener.callback(tcData, true);
+                                console.log('GDPR TCF: Notified listener', listener.id);
+                            } catch (e) {
+                                console.error('GDPR TCF: Error notifying listener', listener.id, e);
+                            }
+                        });
+                        
+                        // Force Google AdSense to check consent again
+                        if (window.googletag && typeof window.googletag === 'object') {
+                            console.log('GDPR TCF: Notifying Google Ad Manager of consent changes');
+                            try {
+                                // Force Google Ad Manager to re-evaluate consent
+                                if (window.googletag.cmd) {
+                                    window.googletag.cmd.push(function() {
+                                        if (window.googletag.pubads) {
+                                            // Clear existing ads if consent was denied
+                                            if (!tcData.purpose.consents[2] && !tcData.purpose.consents[3] && !tcData.purpose.consents[4]) {
+                                                console.log('GDPR TCF: Clearing Google ads due to consent denial');
+                                                window.googletag.pubads().clear();
+                                            }
+                                            // Refresh consent state
+                                            window.googletag.pubads().refresh();
+                                        }
+                                    });
+                                }
+                            } catch (e) {
+                                console.error('GDPR TCF: Error notifying Google Ad Manager:', e);
+                            }
+                        }
+                        
+                        // Force AdSense to check consent again if present
+                        if (window.adsbygoogle) {
+                            console.log('GDPR TCF: Notifying AdSense of consent changes');
+                            try {
+                                // AdSense consent notification
+                                window.adsbygoogle = window.adsbygoogle || [];
+                                
+                                // If consent denied, block new ads
+                                if (!tcData.purpose.consents[2] && !tcData.purpose.consents[3] && !tcData.purpose.consents[4]) {
+                                    console.log('GDPR TCF: Blocking AdSense due to consent denial');
+                                    // Remove existing ad elements
+                                    var adElements = document.querySelectorAll('.adsbygoogle');
+                                    adElements.forEach(function(ad) {
+                                        if (ad.parentNode) {
+                                            ad.parentNode.removeChild(ad);
+                                        }
+                                    });
+                                } else {
+                                    console.log('GDPR TCF: AdSense consent granted, ads can load');
+                                }
+                            } catch (e) {
+                                console.error('GDPR TCF: Error handling AdSense consent:', e);
+                            }
+                        }
+                    }
                 });
             }
             
@@ -726,6 +970,187 @@ class Manus_GDPR_Frontend {
             window.__tcfapi.gdprApplies = true;
             
             console.log('GDPR Cookie Consent: IAB TCF v2.2 API initialized');
+            
+        })();
+        </script>
+        <?php
+    }
+
+    /**
+     * Add additional AdSense and advertising blocking script
+     */
+    public function add_adsense_blocking_script() {
+        ?>
+        <script type="text/javascript">
+        (function() {
+            'use strict';
+            
+            // Advanced AdSense blocking functionality
+            
+            // Override fetch to block advertising requests
+            if (window.fetch) {
+                const originalFetch = window.fetch;
+                window.fetch = function(resource, init) {
+                    const url = typeof resource === 'string' ? resource : resource.url;
+                    
+                    // Check if this is an advertising request
+                    if (url && shouldBlockAdvertisingRequest(url)) {
+                        console.log('GDPR: Blocked advertising fetch request:', url);
+                        return Promise.reject(new Error('Blocked by GDPR consent'));
+                    }
+                    
+                    return originalFetch.apply(this, arguments);
+                };
+            }
+            
+            // Override XMLHttpRequest to block advertising requests
+            const originalXHROpen = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
+                if (url && shouldBlockAdvertisingRequest(url)) {
+                    console.log('GDPR: Blocked advertising XHR request:', url);
+                    // Return a mock response
+                    this.responseText = '';
+                    this.status = 204;
+                    return;
+                }
+                
+                return originalXHROpen.apply(this, arguments);
+            };
+            
+            // Function to check if a URL should be blocked
+            function shouldBlockAdvertisingRequest(url) {
+                // Get current consent with proper decoding
+                const consent = getCookie('manus_gdpr_consent');
+                const consentData = getCookie('manus_gdpr_consent_data');
+                
+                let blockAds = true;
+                
+                try {
+                    if (consentData) {
+                        // Decode URL-encoded cookie data
+                        const decodedData = decodeURIComponent(consentData);
+                        const parsedData = JSON.parse(decodedData);
+                        blockAds = !parsedData.data.advertising;
+                    } else if (consent) {
+                        // Simple consent check
+                        blockAds = consent !== 'accepted';
+                    }
+                } catch (e) {
+                    console.warn('GDPR: Error parsing consent for request blocking:', e);
+                    blockAds = true; // Default to blocking on error
+                }
+                
+                if (!blockAds) {
+                    return false;
+                }
+                
+                // Check if URL is advertising-related
+                const adDomains = [
+                    'googlesyndication.com',
+                    'googleadservices.com',
+                    'googletagmanager.com',
+                    'doubleclick.net',
+                    'googletagservices.com',
+                    'google-analytics.com',
+                    'facebook.com/tr',
+                    'facebook.net',
+                    'fbcdn.net'
+                ];
+                
+                return adDomains.some(domain => url.includes(domain));
+            }
+            
+            // Helper function to get cookie
+            function getCookie(name) {
+                const value = "; " + document.cookie;
+                const parts = value.split("; " + name + "=");
+                if (parts.length === 2) {
+                    return parts.pop().split(";").shift();
+                }
+                return null;
+            }
+            
+            // Function to clean advertising cookies
+            function cleanAdvertisingCookies() {
+                const adCookiePatterns = [
+                    /^_ga/, /^_gid/, /^_gat/, /^__gads/, /^__gpi/,
+                    /^_fbp/, /^_fbc/, /^fr/, /^IDE/, /^test_cookie/,
+                    /^NID/, /^DSID/, /^FLC/, /^AID/, /^TAID/,
+                    /^google_/, /^__utm/, /^_dc_gtm_/
+                ];
+                
+                // Get all cookies
+                const cookies = document.cookie.split(';');
+                
+                cookies.forEach(cookie => {
+                    const cookieName = cookie.split('=')[0].trim();
+                    
+                    // Check if this cookie matches advertising patterns
+                    if (adCookiePatterns.some(pattern => pattern.test(cookieName))) {
+                        // Delete the cookie
+                        document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                        document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname + ';';
+                        document.cookie = cookieName + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + window.location.hostname + ';';
+                        console.log('GDPR: Cleaned advertising cookie:', cookieName);
+                    }
+                });
+            }
+            
+            // Listen for consent changes
+            document.addEventListener('manus-gdpr-consent-updated', function(event) {
+                const consentData = event.detail.consentData;
+                
+                if (!consentData.advertising) {
+                    console.log('GDPR: Advertising consent denied, cleaning cookies and blocking content');
+                    cleanAdvertisingCookies();
+                    
+                    // Also remove localStorage items
+                    const adLocalStoragePatterns = [
+                        /^_ga/, /^_gid/, /^google_/, /^__utm/,
+                        /^_fbp/, /^_fbc/, /^facebook/
+                    ];
+                    
+                    try {
+                        for (let i = localStorage.length - 1; i >= 0; i--) {
+                            const key = localStorage.key(i);
+                            if (key && adLocalStoragePatterns.some(pattern => pattern.test(key))) {
+                                localStorage.removeItem(key);
+                                console.log('GDPR: Cleaned advertising localStorage item:', key);
+                            }
+                        }
+                    } catch (e) {
+                        console.warn('GDPR: Could not clean localStorage:', e);
+                    }
+                }
+            });
+            
+            // Initial cleanup if advertising consent is denied
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(function() {
+                    const consent = getCookie('manus_gdpr_consent');
+                    const consentData = getCookie('manus_gdpr_consent_data');
+                    
+                    let shouldClean = true;
+                    
+                    try {
+                        if (consentData) {
+                            // Decode URL-encoded cookie data
+                            const decodedData = decodeURIComponent(consentData);
+                            const parsedData = JSON.parse(decodedData);
+                            shouldClean = !parsedData.data.advertising;
+                        } else if (consent) {
+                            shouldClean = consent !== 'accepted';
+                        }
+                    } catch (e) {
+                        console.warn('GDPR: Error parsing consent for cleanup:', e);
+                        shouldClean = true;
+                    }
+                    
+                    if (shouldClean) {
+                        cleanAdvertisingCookies();
+                    }
+                }, 1000);
+            });
             
         })();
         </script>
