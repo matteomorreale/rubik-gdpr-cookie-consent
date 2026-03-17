@@ -1,6 +1,6 @@
 ![Rubik GDPR Cookie Consent Cover](https://matteomorreale.it/wp-content/uploads/2025/06/Free-GDPR-Cookie-Consent.jpg)
 
-# Rubik FREE GDPR Cookie Consent 🍪
+# Rubik FREE GDPR Cookie Consent
 
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
@@ -12,11 +12,9 @@
 
 Rubik GDPR Cookie Consent is a professional WordPress plugin that offers a complete solution for cookie consent management, designed to ensure compliance with GDPR, CCPA and other privacy regulations worldwide.
 
-![Banner Preview](public/img/cover-image.jpg)
+## Key Features
 
-## ✨ Key Features
-
-### 🎨 **Modern and Accessible Design**
+### **Modern and Accessible Design**
 
 - **Glassmorphism UI** with blur and transparency effects
 - **Automatic theme** that adapts to system preferences (light/dark/auto)
@@ -24,7 +22,7 @@ Rubik GDPR Cookie Consent is a professional WordPress plugin that offers a compl
 - **Safe Area Support** for devices with notch (iPhone X+, macOS)
 - **Smooth animations** with optimized CSS transitions
 
-### 🛡️ **Regulatory Compliance**
+### **Regulatory Compliance**
 
 - **GDPR compliant** (General Data Protection Regulation)
 - **CCPA ready** (California Consumer Privacy Act)
@@ -32,7 +30,7 @@ Rubik GDPR Cookie Consent is a professional WordPress plugin that offers a compl
 - **Consent documentation** with timestamp and IP tracking
 - **Configurable retention policy** for consent data
 
-### ⚙️ **Advanced Consent Management**
+### **Advanced Consent Management**
 
 - **Customizable categories** (Necessary, Analytics, Advertising, Functional)
 - **Granular consent** for each cookie category
@@ -40,7 +38,7 @@ Rubik GDPR Cookie Consent is a professional WordPress plugin that offers a compl
 - **Automatic cleanup** of expired consents via cron job
 - **Export/Import** configurations
 
-### 🔧 **Administrative Features**
+### **Administrative Features**
 
 - **Intuitive dashboard** with real-time statistics (total, accepted, rejected, partial)
 - **Automatic cookie scanner** to detect all site cookies
@@ -49,7 +47,7 @@ Rubik GDPR Cookie Consent is a professional WordPress plugin that offers a compl
 - **Detailed logging** with status filters, IP/user search and pagination
 - **Integrated TCF v2.2 tests** to verify IAB compliance
 
-## 🚀 Quick Installation
+## Quick Installation
 
 ### Method 1: Via WordPress Admin
 
@@ -74,16 +72,16 @@ wp plugin activate rubik-gdpr-cookie-consent
 
 > **Important**: After installation, go to **WordPress Admin** → **Rubik GDPR** to complete the initial configuration.
 
-## 📖 Initial Configuration
+## Initial Configuration
 
 ### 1. Basic Configuration
 
 After activation, go to **WordPress Admin** → **Rubik GDPR** → **Settings**:
 
-- ✅ **Enable cookie banner**
-- 📝 **Customize the message**
-- 🎨 **Choose theme and layout**
-- 📍 **Set banner position**
+- **Enable cookie banner**
+- **Customize the message**
+- **Choose theme and layout**
+- **Set banner position**
 
 ### 2. Cookie Categories
 
@@ -103,12 +101,12 @@ $categories = [
 
 Set how long to keep consents:
 
-- 📅 **30 days** - For testing and development
-- 📅 **6 months** - Basic configuration for small sites
-- 📅 **1 year** - Recommended configuration
-- 📅 **2-10 years** - For comprehensive historical analysis and legal compliance
+- **30 days** - For testing and development
+- **6 months** - Basic configuration for small sites
+- **1 year** - Recommended configuration
+- **2-10 years** - For comprehensive historical analysis and legal compliance
 
-## 🎯 Usage Examples
+## Usage Examples
 
 ### Custom Consent Banner
 
@@ -183,18 +181,18 @@ add_filter('manus_gdpr_cookie_categories', function($categories) {
 });
 ```
 
-## 📊 Dashboard and Statistics
+## Dashboard and Statistics
 
 The admin panel provides a comprehensive overview of consents:
 
 ### Real-Time Statistics
 
-- 📈 **Total consents** recorded in database
-- ✅ **Accepted consents** (all cookies enabled)
-- ❌ **Rejected consents** (only necessary cookies)
-- ⚖️ **Partial consents** (selective categories)
-- 🕒 **Recent consents** (last 7/30 days)
-- ⏰ **Expired consents** to be automatically deleted
+- **Total consents** recorded in database
+- **Accepted consents** (all cookies enabled)
+- **Rejected consents** (only necessary cookies)
+- **Partial consents** (selective categories)
+- **Recent consents** (last 7/30 days)
+- **Expired consents** to be automatically deleted
 
 ### Advanced Management
 
@@ -214,7 +212,7 @@ WordPress Admin → Rubik GDPR → Consent Log → [Filters] → Export CSV
 wp gdpr export-consents --format=csv --file=consents-2025.csv
 ```
 
-## 🔧 API and Developers
+## API and Developers
 
 ### Available WordPress Hooks
 
@@ -281,7 +279,7 @@ POST   /wp-json/m2-gdpr/v1/clean-expired # Clean expired consents
 
 > **Note**: REST API endpoints are currently in development for future plugin versions.
 
-## 🛠️ Advanced Configurations
+## Advanced Configurations
 
 ### CSS Customization
 
@@ -348,7 +346,7 @@ add_filter('manus_gdpr_no_cache_pages', function($pages) {
 });
 ```
 
-## 🧪 Testing and Debug
+## Testing and Debug
 
 ### Compliance Tests
 
@@ -391,35 +389,35 @@ window.__tcfapi('addEventListener', 2, function(tcData, success) {
 });
 ```
 
-## 📱 Compatibility
+## Compatibility
 
 ### Supported Browsers
 
 | Browser | Version | Status |
 |---------|----------|---------|
-| Chrome  | 80+      | ✅ Full |
-| Firefox | 75+      | ✅ Full |
-| Safari  | 13+      | ✅ Full |
-| Edge    | 80+      | ✅ Full |
-| IE      | 11       | ⚠️ Basic |
+| Chrome  | 80+      | Full |
+| Firefox | 75+      | Full |
+| Safari  | 13+      | Full |
+| Edge    | 80+      | Full |
+| IE      | 11       | Basic |
 
 ### WordPress
 
 - **WordPress**: 5.0+ (tested up to 6.5)
 - **PHP**: 7.4+ (recommended: 8.1+)
 - **MySQL**: 5.6+ / MariaDB 10.0+
-- **Multisite**: ✅ Fully supported
+- **Multisite**: Fully supported
 
 ### Compatible Plugins
 
-- ✅ **WooCommerce** 5.0+
-- ✅ **Yoast SEO**
-- ✅ **Elementor**
-- ✅ **WP Rocket**
-- ✅ **W3 Total Cache**
-- ✅ **CloudFlare**
+- **WooCommerce** 5.0+
+- **Yoast SEO**
+- **Elementor**
+- **WP Rocket**
+- **W3 Total Cache**
+- **CloudFlare**
 
-## 🤝 Contributing
+## Contributing
 
 Help us improve Rubik GDPR Cookie Consent!
 
@@ -433,10 +431,10 @@ cd rubik-gdpr-cookie-consent
 
 ### 2. Guidelines
 
-- 📝 **Code**: Follow [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/)
-- 🧪 **Tests**: Add tests for new features
-- 📖 **Documentation**: Update docs for API changes
-- 🌍 **i18n**: Add translations for new strings
+- **Code**: Follow [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/)
+- **Tests**: Add tests for new features
+- **Documentation**: Update docs for API changes
+- **i18n**: Add translations for new strings
 
 ### 3. Pull Request Process
 
@@ -445,7 +443,7 @@ cd rubik-gdpr-cookie-consent
 3. Push the branch: `git push origin feature/amazing-feature`
 4. Open a Pull Request
 
-## 🎉 Acknowledgments
+## Acknowledgments
 
 ### Technologies Used
 
@@ -465,9 +463,9 @@ cd rubik-gdpr-cookie-consent
 
 [See all contributors on GitHub](https://github.com/matteomorreale/rubik-gdpr-cookie-consent/graphs/contributors)
 
-## 🆘 Support
+## Support
 
-### 🐛 Bug Reports
+### Bug Reports
 
 Found a bug? Help us fix it!
 
@@ -478,7 +476,7 @@ Found a bug? Help us fix it!
    - Screenshots or videos (if helpful)
    - Environment information (WordPress, PHP, browser)
 
-### 💡 Feature Requests
+### Feature Requests
 
 Have an idea to improve the plugin?
 
@@ -488,7 +486,7 @@ Have an idea to improve the plugin?
 
 ---
 
-## 📄 License
+## License
 
 This project is released under the **Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0)**.
 
