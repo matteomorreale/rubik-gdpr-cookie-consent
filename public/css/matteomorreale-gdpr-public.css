@@ -1,0 +1,327 @@
+:root {
+    --matteomorreale-gdpr-radius: 16px;
+    --matteomorreale-gdpr-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.06);
+    --matteomorreale-gdpr-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.matteomorreale-gdpr-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(47, 79, 79, 0.6);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+#matteomorreale-gdpr-floating-icon {
+    display: flex !important;
+}
+
+.matteomorreale-gdpr-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+#matteomorreale-gdpr-cookie-banner {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 900px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    color: #2c3e50;
+    border-radius: var(--matteomorreale-gdpr-radius);
+    box-shadow: var(--matteomorreale-gdpr-shadow);
+    z-index: 9999;
+    font-family: var(--matteomorreale-gdpr-font);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.35s ease;
+    padding: 20px;
+}
+
+#matteomorreale-gdpr-cookie-banner.bottom {
+    bottom: 20px;
+}
+
+#matteomorreale-gdpr-cookie-banner.top {
+    top: 20px;
+}
+
+.matteomorreale-gdpr-banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.matteomorreale-gdpr-banner-header {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.matteomorreale-gdpr-banner-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 115, 170, 0.12);
+    flex: 0 0 auto;
+}
+
+.matteomorreale-gdpr-banner-text h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+.matteomorreale-gdpr-banner-text p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: inherit;
+    opacity: 0.9;
+}
+
+.matteomorreale-gdpr-banner-text a {
+    color: inherit;
+    text-decoration: underline;
+    opacity: 0.95;
+}
+
+.matteomorreale-gdpr-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+#matteomorreale-gdpr-accept-button,
+#matteomorreale-gdpr-reject-button,
+#matteomorreale-gdpr-manage-button {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: var(--matteomorreale-gdpr-font);
+    font-weight: 600;
+    font-size: 14px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+#matteomorreale-gdpr-accept-button {
+    background: #0073aa;
+    color: #fff;
+}
+
+#matteomorreale-gdpr-reject-button {
+    background: #f8f9fa;
+    color: #495057;
+    border: 2px solid #e9ecef;
+}
+
+#matteomorreale-gdpr-manage-button {
+    background: rgba(0, 0, 0, 0.04);
+    color: #2c3e50;
+    border: 2px solid rgba(0, 0, 0, 0.06);
+}
+
+#matteomorreale-gdpr-accept-button:hover,
+#matteomorreale-gdpr-reject-button:hover,
+#matteomorreale-gdpr-manage-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+#matteomorreale-gdpr-preferences-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 20px;
+    overflow: auto;
+}
+
+#matteomorreale-gdpr-preferences-content {
+    max-width: 720px;
+    margin: 40px auto;
+    border-radius: 16px;
+    padding: 22px;
+    font-family: var(--matteomorreale-gdpr-font);
+    box-shadow: var(--matteomorreale-gdpr-shadow);
+}
+
+.matteomorreale-gdpr-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    cursor: pointer;
+    float: right;
+    line-height: 1;
+}
+
+.matteomorreale-gdpr-preference-category {
+    border: 1px solid #e9ecef;
+    border-radius: 14px;
+    padding: 14px 14px;
+    margin: 12px 0;
+}
+
+.matteomorreale-gdpr-preference-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.matteomorreale-gdpr-preference-category h4 {
+    margin: 0 0 6px;
+    font-size: 15px;
+}
+
+.matteomorreale-gdpr-preference-category p {
+    margin: 0;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 58px;
+    height: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+    transition: 0.2s;
+    border-radius: 999px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 3px;
+    bottom: 3px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    transition: 0.2s;
+    border-radius: 999px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+input:checked + .slider {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+input:checked + .slider:before {
+    transform: translateX(28px);
+}
+
+input:disabled + .slider {
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+#matteomorreale-gdpr-floating-icon {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #0073aa;
+    color: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2147483647;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#matteomorreale-gdpr-floating-icon:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+#matteomorreale-gdpr-floating-icon svg {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 2px;
+}
+
+.matteomorreale-gdpr-floating-text {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1;
+}
+
+@keyframes matteomorrealeGdprFadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#matteomorreale-gdpr-floating-icon.show {
+    animation: matteomorrealeGdprFadeInUp 0.5s ease-out;
+}
+
+@media (max-width: 768px) {
+    #matteomorreale-gdpr-cookie-banner {
+        width: calc(100% - 24px);
+        padding: 16px;
+    }
+
+    .matteomorreale-gdpr-buttons {
+        justify-content: stretch;
+    }
+
+    #matteomorreale-gdpr-accept-button,
+    #matteomorreale-gdpr-reject-button,
+    #matteomorreale-gdpr-manage-button {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    #matteomorreale-gdpr-floating-icon {
+        width: 50px;
+        height: 50px;
+        bottom: 15px;
+        left: 15px;
+    }
+
+    #matteomorreale-gdpr-floating-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .matteomorreale-gdpr-floating-text {
+        font-size: 8px;
+    }
+}
