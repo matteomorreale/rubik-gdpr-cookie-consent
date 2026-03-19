@@ -27,6 +27,42 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 $options = get_option( 'manus_gdpr_settings' );
 $delete_on_uninstall = isset( $options['delete_data_on_uninstall'] ) ? $options['delete_data_on_uninstall'] : false;
 
+function rubik_gdpr_unschedule_cleanup_hooks() {
+    if ( ! function_exists( '_get_cron_array' ) ) {
+        return false;
+    }
+
+    $cron = _get_cron_array();
+    if ( empty( $cron ) ) {
+        return false;
+    }
+
+    $unscheduled_any = false;
+
+    foreach ( $cron as $timestamp => $hooks ) {
+        if ( ! is_array( $hooks ) ) {
+            continue;
+        }
+
+        foreach ( $hooks as $hook => $events ) {
+            if ( ! is_string( $hook ) || strpos( $hook, 'gdpr_cleanup_expired_consents' ) === false ) {
+                continue;
+            }
+
+            if ( ! is_array( $events ) ) {
+                continue;
+            }
+
+            foreach ( $events as $event ) {
+                wp_unschedule_event( (int) $timestamp, $hook, isset( $event['args'] ) ? (array) $event['args'] : array() );
+                $unscheduled_any = true;
+            }
+        }
+    }
+
+    return $unscheduled_any;
+}
+
 // Only delete data if the option is enabled
 if ( $delete_on_uninstall ) {
     global $wpdb;
@@ -48,7 +84,8 @@ if ( $delete_on_uninstall ) {
     delete_option( 'manus_gdpr_db_version' );
     
     // Clear scheduled cron events
-    wp_clear_scheduled_hook( 'manus_gdpr_cleanup_expired_consents' );
+    wp_clear_scheduled_hook( 'rubik_gdpr_cleanup_expired_consents' );
+    rubik_gdpr_unschedule_cleanup_hooks();
     
     // Delete transients (if any)
     delete_transient( 'manus_gdpr_cookie_scan_cache' );
@@ -74,7 +111,8 @@ if ( $delete_on_uninstall ) {
             delete_option( 'manus_gdpr_db_version' );
             
             // Clear cron events for this site
-            wp_clear_scheduled_hook( 'manus_gdpr_cleanup_expired_consents' );
+            wp_clear_scheduled_hook( 'rubik_gdpr_cleanup_expired_consents' );
+            rubik_gdpr_unschedule_cleanup_hooks();
             
             // Delete transients for this site
             delete_transient( 'manus_gdpr_cookie_scan_cache' );

@@ -29,11 +29,46 @@ class Manus_GDPR_Deactivator {
      * @since    1.0.0
      */
     public static function deactivate() {
-        // Clear scheduled cron jobs
-        wp_clear_scheduled_hook( 'manus_gdpr_cleanup_expired_consents' );
+        self::unschedule_cleanup_hooks();
         
         // Optionally, clean up database tables or settings here.
         // For now, we'll leave the data for re-activation.
+    }
+
+    private static function unschedule_cleanup_hooks() {
+        if ( ! function_exists( '_get_cron_array' ) ) {
+            return false;
+        }
+
+        $cron = _get_cron_array();
+        if ( empty( $cron ) ) {
+            return false;
+        }
+
+        $unscheduled_any = false;
+
+        foreach ( $cron as $timestamp => $hooks ) {
+            if ( ! is_array( $hooks ) ) {
+                continue;
+            }
+
+            foreach ( $hooks as $hook => $events ) {
+                if ( ! is_string( $hook ) || strpos( $hook, 'gdpr_cleanup_expired_consents' ) === false ) {
+                    continue;
+                }
+
+                if ( ! is_array( $events ) ) {
+                    continue;
+                }
+
+                foreach ( $events as $event ) {
+                    wp_unschedule_event( (int) $timestamp, $hook, isset( $event['args'] ) ? (array) $event['args'] : array() );
+                    $unscheduled_any = true;
+                }
+            }
+        }
+
+        return $unscheduled_any;
     }
 
 }

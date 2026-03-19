@@ -56,7 +56,7 @@
         <table class="form-table">
             <tr>
                 <th scope="row"><?php _e( 'Versione:', 'm2-gdpr' ); ?></th>
-                <td><?php echo esc_html( defined('MANUS_GDPR_VERSION') ? MANUS_GDPR_VERSION : '1.0.0' ); ?></td>
+                <td><?php echo esc_html( defined('RUBIK_GDPR_VERSION') ? RUBIK_GDPR_VERSION : '1.0.0' ); ?></td>
             </tr>
             <tr>
                 <th scope="row"><?php _e( 'Database:', 'm2-gdpr' ); ?></th>

@@ -51,59 +51,59 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'MANUS_GDPR_VERSION', '2.0.1' );
-define( 'MANUS_GDPR_PATH', plugin_dir_path( __FILE__ ) );
-define( 'MANUS_GDPR_URL', plugin_dir_url( __FILE__ ) );
+define( 'RUBIK_GDPR_VERSION', '2.0.1' );
+define( 'RUBIK_GDPR_PATH', plugin_dir_path( __FILE__ ) );
+define( 'RUBIK_GDPR_URL', plugin_dir_url( __FILE__ ) );
 
 // Include necessary files.
-require_once MANUS_GDPR_PATH . 'includes/class-manus-gdpr-activator.php';
-require_once MANUS_GDPR_PATH . 'includes/class-manus-gdpr-deactivator.php';
-require_once MANUS_GDPR_PATH . 'includes/class-manus-gdpr-admin.php';
-require_once MANUS_GDPR_PATH . 'includes/class-manus-gdpr-frontend.php';
-require_once MANUS_GDPR_PATH . 'includes/class-manus-gdpr-database.php';
-require_once MANUS_GDPR_PATH . 'includes/class-manus-gdpr-cookie-scanner-config.php';
-require_once MANUS_GDPR_PATH . 'includes/class-manus-gdpr-cookie-scanner.php';
+require_once RUBIK_GDPR_PATH . 'includes/class-manus-gdpr-activator.php';
+require_once RUBIK_GDPR_PATH . 'includes/class-manus-gdpr-deactivator.php';
+require_once RUBIK_GDPR_PATH . 'includes/class-manus-gdpr-admin.php';
+require_once RUBIK_GDPR_PATH . 'includes/class-manus-gdpr-frontend.php';
+require_once RUBIK_GDPR_PATH . 'includes/class-manus-gdpr-database.php';
+require_once RUBIK_GDPR_PATH . 'includes/class-manus-gdpr-cookie-scanner-config.php';
+require_once RUBIK_GDPR_PATH . 'includes/class-manus-gdpr-cookie-scanner.php';
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing hooks.
  */
-require_once MANUS_GDPR_PATH . 'includes/class-manus-gdpr.php';
+require_once RUBIK_GDPR_PATH . 'includes/class-manus-gdpr.php';
 
 /**
  * Begins execution of the plugin.
  * Since everything within the plugin is registered via hooks, the action
  * can be taken at any point in the plugin's life.
  */
-function run_manus_gdpr() {
+function run_rubik_gdpr() {
     $plugin = new Manus_GDPR();
     $plugin->run();
 }
-run_manus_gdpr();
+run_rubik_gdpr();
 
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-manus-gdpr-activator.php
  */
-function activate_manus_gdpr() {
+function activate_rubik_gdpr() {
     Manus_GDPR_Activator::activate();
 }
-register_activation_hook( __FILE__, 'activate_manus_gdpr' );
+register_activation_hook( __FILE__, 'activate_rubik_gdpr' );
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-manus-gdpr-deactivator.php
  */
-function deactivate_manus_gdpr() {
+function deactivate_rubik_gdpr() {
     Manus_GDPR_Deactivator::deactivate();
 }
-register_deactivation_hook( __FILE__, 'deactivate_manus_gdpr' );
+register_deactivation_hook( __FILE__, 'deactivate_rubik_gdpr' );
 
 /**
  * Debug function to test GDPR consent behavior
  * Add ?gdpr_debug=1 to any URL to see consent status
  */
-function manus_gdpr_debug_info() {
+function rubik_gdpr_debug_info() {
     if ( isset( $_GET['gdpr_debug'] ) && current_user_can( 'manage_options' ) ) {
         echo '<div style="position: fixed; top: 10px; right: 10px; background: white; padding: 15px; border: 2px solid #333; z-index: 999999; font-family: monospace; font-size: 12px; max-width: 400px;">';
         echo '<h4>GDPR Debug Info</h4>';

@@ -51,7 +51,7 @@ class Manus_GDPR_Admin {
         $this->version = $version;
         
         // Hook per AJAX cancellazione consensi
-        add_action( 'wp_ajax_manus_gdpr_clear_consents', array( $this, 'handle_clear_consents_ajax' ) );
+        add_action( 'wp_ajax_rubik_gdpr_clear_consents', array( $this, 'handle_clear_consents_ajax' ) );
 
     }
 
@@ -62,7 +62,7 @@ class Manus_GDPR_Admin {
      */
     public function enqueue_styles() {
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../admin/css/manus-gdpr-admin.css', array(), MANUS_GDPR_VERSION . '.4', 'all' );
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../admin/css/manus-gdpr-admin.css', array(), RUBIK_GDPR_VERSION . '.4', 'all' );
 
     }
 
@@ -73,12 +73,12 @@ class Manus_GDPR_Admin {
      */
     public function enqueue_scripts() {
 
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../admin/js/manus-gdpr-admin.js', array( 'jquery' ), MANUS_GDPR_VERSION . '.4', false );
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../admin/js/manus-gdpr-admin.js', array( 'jquery' ), RUBIK_GDPR_VERSION . '.4', false );
         
         // Localizzazione per AJAX
-        wp_localize_script( $this->plugin_name, 'manus_gdpr_admin_ajax', array(
+        wp_localize_script( $this->plugin_name, 'rubik_gdpr_admin_ajax', array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce' => wp_create_nonce( 'manus_gdpr_clear_consents' )
+            'nonce' => wp_create_nonce( 'rubik_gdpr_clear_consents' )
         ) );
 
     }
@@ -135,7 +135,7 @@ class Manus_GDPR_Admin {
      * @since    1.0.0
      */
     public function display_plugin_setup_page() {
-        require_once MANUS_GDPR_PATH . 'admin/partials/manus-gdpr-admin-display.php';
+        require_once RUBIK_GDPR_PATH . 'admin/partials/manus-gdpr-admin-display.php';
     }
 
     /**
@@ -144,7 +144,7 @@ class Manus_GDPR_Admin {
      * @since    1.0.0
      */
     public function display_cookie_scanner_page() {
-        require_once MANUS_GDPR_PATH . 'admin/partials/manus-gdpr-cookie-scanner-display.php';
+        require_once RUBIK_GDPR_PATH . 'admin/partials/manus-gdpr-cookie-scanner-display.php';
     }
 
     /**
@@ -179,7 +179,7 @@ class Manus_GDPR_Admin {
         // Get statistics
         $stats = Manus_GDPR_Database::get_consent_statistics();
         
-        require_once MANUS_GDPR_PATH . 'admin/partials/manus-gdpr-consent-log-display.php';
+        require_once RUBIK_GDPR_PATH . 'admin/partials/manus-gdpr-consent-log-display.php';
     }
 
     /**
@@ -1363,15 +1363,15 @@ class Manus_GDPR_Admin {
                 resultDiv.innerHTML = "<p style=\"color: #0073aa;\">⏳ " + "' . esc_js( __( 'Cancellazione in corso...', 'm2-gdpr' ) ) . '" + "</p>";
                 
                 // AJAX request
-                fetch(manus_gdpr_admin_ajax.ajax_url, {
+                fetch(rubik_gdpr_admin_ajax.ajax_url, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                     },
                     body: new URLSearchParams({
-                        action: "manus_gdpr_clear_consents",
+                        action: "rubik_gdpr_clear_consents",
                         type: type,
-                        nonce: manus_gdpr_admin_ajax.nonce
+                        nonce: rubik_gdpr_admin_ajax.nonce
                     })
                 })
                 .then(response => response.json())
@@ -1402,7 +1402,7 @@ class Manus_GDPR_Admin {
      */
     public function handle_clear_consents_ajax() {
         // Verifica nonce per sicurezza
-        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'manus_gdpr_clear_consents' ) ) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'rubik_gdpr_clear_consents' ) ) {
             wp_die( __( 'Security check failed', 'm2-gdpr' ) );
         }
         

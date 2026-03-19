@@ -67,7 +67,7 @@ class Manus_GDPR_Frontend {
      */
     public function enqueue_styles() {
 
-        wp_enqueue_style( $this->public_handle, plugin_dir_url( __FILE__ ) . '../public/css/matteomorreale-gdpr-public.css', array(), MANUS_GDPR_VERSION, 'all' );
+        wp_enqueue_style( $this->public_handle, plugin_dir_url( __FILE__ ) . '../public/css/matteomorreale-gdpr-public.css', array(), RUBIK_GDPR_VERSION, 'all' );
 
         // Add custom CSS if set
         $this->add_custom_css();
@@ -81,7 +81,7 @@ class Manus_GDPR_Frontend {
      */
     public function enqueue_scripts() {
 
-        wp_enqueue_script( $this->public_handle, plugin_dir_url( __FILE__ ) . '../public/js/matteomorreale-gdpr-public.js', array( 'jquery' ), MANUS_GDPR_VERSION, false );
+        wp_enqueue_script( $this->public_handle, plugin_dir_url( __FILE__ ) . '../public/js/matteomorreale-gdpr-public.js', array( 'jquery' ), RUBIK_GDPR_VERSION, false );
 
         // Get options for JavaScript
         $options = get_option( 'manus_gdpr_settings', array() );
@@ -131,11 +131,13 @@ class Manus_GDPR_Frontend {
         // Check if consent has been given
         if ( ! isset( $_COOKIE['manus_gdpr_consent'] ) ) {
             // Show full banner if no consent
-            include_once MANUS_GDPR_PATH . 'public/partials/matteomorreale-gdpr-public-display.php';
+            include_once RUBIK_GDPR_PATH . 'public/partials/matteomorreale-gdpr-public-display.php';
         } else {
             // Show only floating icon and preferences modal if consent already given
-            include_once MANUS_GDPR_PATH . 'public/partials/matteomorreale-gdpr-floating-icon.php';
+            include_once RUBIK_GDPR_PATH . 'public/partials/matteomorreale-gdpr-floating-icon.php';
         }
+
+        do_action( 'rubik_gdpr_banner_displayed' );
     }
 
     /**
@@ -195,6 +197,15 @@ class Manus_GDPR_Frontend {
             'timestamp' => time()
         );
         setcookie( 'manus_gdpr_consent_data', json_encode( $consent_cookie_data ), time() + (365 * 24 * 60 * 60), '/' );
+
+        $consent_record = array(
+            'user_id' => $user_id,
+            'ip_address' => $ip_address,
+            'consent_status' => $consent_status,
+            'consent_data' => $consent_data,
+        );
+
+        do_action( 'rubik_gdpr_consent_recorded', $consent_record );
 
         wp_send_json_success( 'Consent recorded successfully.' );
     }

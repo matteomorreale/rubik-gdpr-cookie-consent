@@ -11,6 +11,7 @@
 
 $options = get_option( 'manus_gdpr_settings' );
 $banner_message = isset( $options['cookie_banner_message'] ) ? $options['cookie_banner_message'] : __( 'Utilizziamo i cookie per migliorare la tua esperienza di navigazione. Cliccando su "Accetta", acconsenti all\'uso di tutti i cookie.', 'm2-gdpr' );
+$banner_message = apply_filters( 'rubik_gdpr_banner_message', $banner_message );
 $banner_position = isset( $options['cookie_banner_position'] ) ? $options['cookie_banner_position'] : 'bottom';
 $privacy_page_link = isset( $privacy_page_link ) ? $privacy_page_link : '';
 $cookie_policy_link = isset( $cookie_policy_link ) ? $cookie_policy_link : '';
@@ -234,6 +235,8 @@ $modal_classes = array( 'theme-' . $theme_mode );
                 'required' => false
             )
         );
+
+        $available_categories = apply_filters( 'rubik_gdpr_cookie_categories', $available_categories );
         
         foreach ( $available_categories as $category => $details ):
             $enabled = isset( $cookie_categories[$category] ) ? $cookie_categories[$category] : $details['required'];

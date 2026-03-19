@@ -166,7 +166,7 @@ if (typeof window.__tcfapi === 'function') {
 
 ```php
 // Hook to customize behavior
-add_action('manus_gdpr_consent_recorded', function($consent_data) {
+add_action('rubik_gdpr_consent_recorded', function($consent_data) {
     // Custom logic after consent
     if ($consent_data['consent_status'] === 'accepted') {
         // Enable full services
@@ -175,7 +175,7 @@ add_action('manus_gdpr_consent_recorded', function($consent_data) {
 });
 
 // Filter to modify categories
-add_filter('manus_gdpr_cookie_categories', function($categories) {
+add_filter('rubik_gdpr_cookie_categories', function($categories) {
     $categories['social'] = 'Social Media Cookies';
     return $categories;
 });
@@ -222,32 +222,26 @@ wp gdpr export-consents --format=csv --file=consents-2025.csv
  */
 
 // After consent registration
-do_action('manus_gdpr_consent_recorded', $consent_data);
+do_action('rubik_gdpr_consent_recorded', $consent_data);
 
 // When banner is displayed
-do_action('manus_gdpr_banner_displayed');
-
-// When preferences modal opens
-do_action('manus_gdpr_modal_opened');
+do_action('rubik_gdpr_banner_displayed');
 
 // During automatic cleanup of expired consents (cron)
-do_action('manus_gdpr_expired_consents_cleaned', $deleted_count);
+do_action('rubik_gdpr_expired_consents_cleaned', $deleted_count, $retention_days);
 
 /**
  * Available filters
  */
 
 // Customize banner message
-$message = apply_filters('manus_gdpr_banner_message', $message);
+$message = apply_filters('rubik_gdpr_banner_message', $message);
 
 // Modify available cookie categories
-$categories = apply_filters('manus_gdpr_cookie_categories', $categories);
+$categories = apply_filters('rubik_gdpr_cookie_categories', $categories);
 
 // Change consent retention period
-$retention_days = apply_filters('manus_gdpr_retention_period', $days);
-
-// Customize theme colors
-$colors = apply_filters('manus_gdpr_theme_colors', $colors);
+$retention_days = apply_filters('rubik_gdpr_retention_period', $days);
 ```
 
 ### Database Class Methods
@@ -312,9 +306,9 @@ For WordPress multisite networks, add these configurations:
 
 ```php
 // wp-config.php - Multisite configuration
-define('MANUS_GDPR_MULTISITE_SHARED_CONFIG', true);
-define('MANUS_GDPR_NETWORK_ADMIN_ONLY', false);
-define('MANUS_GDPR_INHERIT_NETWORK_SETTINGS', true);
+define('RUBIK_GDPR_MULTISITE_SHARED_CONFIG', true);
+define('RUBIK_GDPR_NETWORK_ADMIN_ONLY', false);
+define('RUBIK_GDPR_INHERIT_NETWORK_SETTINGS', true);
 ```
 
 ### Performance Optimization
@@ -323,10 +317,10 @@ For high-traffic sites, enable optimizations:
 
 ```php
 // wp-config.php - Performance optimizations
-define('MANUS_GDPR_CACHE_ENABLE', true);
-define('MANUS_GDPR_LAZY_LOAD_SCRIPTS', true);
-define('MANUS_GDPR_COMPRESS_OUTPUT', true);
-define('MANUS_GDPR_ASYNC_CONSENT_LOGGING', true);
+define('RUBIK_GDPR_CACHE_ENABLE', true);
+define('RUBIK_GDPR_LAZY_LOAD_SCRIPTS', true);
+define('RUBIK_GDPR_COMPRESS_OUTPUT', true);
+define('RUBIK_GDPR_ASYNC_CONSENT_LOGGING', true);
 ```
 
 ### CDN and Caching
@@ -335,12 +329,12 @@ Configuration for CDN compatibility:
 
 ```php
 // theme functions.php - CDN support
-add_filter('manus_gdpr_static_urls', function($urls) {
+add_filter('rubik_gdpr_static_urls', function($urls) {
     return str_replace(home_url(), 'https://cdn.example.com', $urls);
 });
 
 // Cache exclusion for dynamic pages
-add_filter('manus_gdpr_no_cache_pages', function($pages) {
+add_filter('rubik_gdpr_no_cache_pages', function($pages) {
     $pages[] = 'consent-preferences';
     return $pages;
 });
@@ -365,13 +359,12 @@ php test-consent-retention.php  # Automatic cleanup test
 
 ```php
 // wp-config.php - Enable GDPR debug
-define('MANUS_GDPR_DEBUG', true);
-define('MANUS_GDPR_LOG_LEVEL', 'debug');
+define('RUBIK_GDPR_DEBUG', true);
+define('RUBIK_GDPR_LOG_LEVEL', 'debug');
 
-// Verify database tables
-global $wpdb;
-$table = $wpdb->prefix . 'manus_gdpr_consents';
-echo $wpdb->get_var("SHOW TABLES LIKE '$table'");
+// Verify database access
+$stats = Manus_GDPR_Database::get_consent_statistics();
+var_dump($stats);
 ```
 
 ### TCF v2.2 Validation

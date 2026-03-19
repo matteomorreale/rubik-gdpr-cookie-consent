@@ -66,8 +66,8 @@ class Manus_GDPR {
      * @since    1.0.0
      */
     public function __construct() {
-        if ( defined( 'MANUS_GDPR_VERSION' ) ) {
-            $this->version = MANUS_GDPR_VERSION;
+        if ( defined( 'RUBIK_GDPR_VERSION' ) ) {
+            $this->version = RUBIK_GDPR_VERSION;
         } else {
             $this->version = '1.0.0';
         }
@@ -175,11 +175,10 @@ class Manus_GDPR {
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
         $this->loader->add_action( 'wp_footer', $plugin_public, 'display_cookie_banner' );
         $this->loader->add_action( 'wp_head', $plugin_public, 'block_scripts' );
-        $this->loader->add_action( 'wp_ajax_manus_gdpr_consent_action', $plugin_public, 'handle_consent_action' );
-        $this->loader->add_action( 'wp_ajax_nopriv_manus_gdpr_consent_action', $plugin_public, 'handle_consent_action' );
         $this->loader->add_action( 'wp_ajax_matteomorreale_gdpr_consent_action', $plugin_public, 'handle_consent_action' );
         $this->loader->add_action( 'wp_ajax_nopriv_matteomorreale_gdpr_consent_action', $plugin_public, 'handle_consent_action' );
-        $this->loader->add_action( 'manus_gdpr_cleanup_expired_consents', $this, 'cleanup_expired_consents' );
+        $this->loader->add_action( 'rubik_gdpr_cleanup_expired_consents', $this, 'cleanup_expired_consents' );
+        $this->loader->add_action( 'init', $this, 'migrate_cron_hooks' );
 
     }
 
@@ -233,6 +232,7 @@ class Manus_GDPR {
         // Get retention settings
         $options = get_option( 'manus_gdpr_settings' );
         $retention_days = isset( $options['consent_retention_period'] ) ? (int) $options['consent_retention_period'] : 365;
+        $retention_days = apply_filters( 'rubik_gdpr_retention_period', $retention_days );
         
         // Load database class
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-manus-gdpr-database.php';
@@ -244,6 +244,59 @@ class Manus_GDPR {
         if ( $deleted > 0 ) {
             error_log( "GDPR Cookie Consent: Cleaned up $deleted expired consents (older than $retention_days days)" );
         }
+
+        do_action( 'rubik_gdpr_expired_consents_cleaned', $deleted, $retention_days );
+    }
+
+    public function migrate_cron_hooks() {
+        if ( wp_next_scheduled( 'rubik_gdpr_cleanup_expired_consents' ) ) {
+            $this->unschedule_cleanup_hooks();
+            return;
+        }
+
+        if ( $this->unschedule_cleanup_hooks() ) {
+            wp_schedule_event( time(), 'daily', 'rubik_gdpr_cleanup_expired_consents' );
+        }
+    }
+
+    private function unschedule_cleanup_hooks() {
+        if ( ! function_exists( '_get_cron_array' ) ) {
+            return false;
+        }
+
+        $cron = _get_cron_array();
+        if ( empty( $cron ) ) {
+            return false;
+        }
+
+        $unscheduled_any = false;
+
+        foreach ( $cron as $timestamp => $hooks ) {
+            if ( ! is_array( $hooks ) ) {
+                continue;
+            }
+
+            foreach ( $hooks as $hook => $events ) {
+                if ( ! is_string( $hook ) || strpos( $hook, 'gdpr_cleanup_expired_consents' ) === false ) {
+                    continue;
+                }
+
+                if ( $hook === 'rubik_gdpr_cleanup_expired_consents' ) {
+                    continue;
+                }
+
+                if ( ! is_array( $events ) ) {
+                    continue;
+                }
+
+                foreach ( $events as $sig => $event ) {
+                    wp_unschedule_event( (int) $timestamp, $hook, isset( $event['args'] ) ? (array) $event['args'] : array() );
+                    $unscheduled_any = true;
+                }
+            }
+        }
+
+        return $unscheduled_any;
     }
 
 }
